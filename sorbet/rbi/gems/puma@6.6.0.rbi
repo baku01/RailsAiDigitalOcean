@@ -2493,28 +2493,14 @@ Puma::HAS_UNIX_SOCKET = T.let(T.unsafe(nil), TrueClass)
 Puma::HTTP_STATUS_CODES = T.let(T.unsafe(nil), Hash)
 
 class Puma::HttpParser
-  # source://puma//lib/puma.rb#12
   def initialize; end
 
-  # source://puma//lib/puma.rb#12
   def body; end
-
-  # source://puma//lib/puma.rb#12
   def error?; end
-
-  # source://puma//lib/puma.rb#12
   def execute(_arg0, _arg1, _arg2); end
-
-  # source://puma//lib/puma.rb#12
   def finish; end
-
-  # source://puma//lib/puma.rb#12
   def finished?; end
-
-  # source://puma//lib/puma.rb#12
   def nread; end
-
-  # source://puma//lib/puma.rb#12
   def reset; end
 end
 
@@ -3017,7 +3003,6 @@ end
 # source://puma//lib/puma/minissl.rb#14
 module Puma::MiniSSL
   class << self
-    # source://puma//lib/puma.rb#12
     def check; end
   end
 end
@@ -3218,35 +3203,17 @@ class Puma::MiniSSL::ContextBuilder
 end
 
 class Puma::MiniSSL::Engine
-  # source://puma//lib/puma.rb#12
   def extract; end
-
-  # source://puma//lib/puma.rb#12
   def init?; end
-
-  # source://puma//lib/puma.rb#12
   def inject(_arg0); end
-
-  # source://puma//lib/puma.rb#12
   def peercert; end
-
-  # source://puma//lib/puma.rb#12
   def read; end
-
-  # source://puma//lib/puma.rb#12
   def shutdown; end
-
-  # source://puma//lib/puma.rb#12
   def ssl_vers_st; end
-
-  # source://puma//lib/puma.rb#12
   def write(_arg0); end
 
   class << self
-    # source://puma//lib/puma.rb#12
     def client; end
-
-    # source://puma//lib/puma.rb#12
     def server(_arg0); end
   end
 end
@@ -3266,7 +3233,6 @@ Puma::MiniSSL::OPENSSL_NO_TLS1_1 = T.let(T.unsafe(nil), FalseClass)
 Puma::MiniSSL::OPENSSL_VERSION = T.let(T.unsafe(nil), String)
 
 class Puma::MiniSSL::SSLContext
-  # source://puma//lib/puma.rb#12
   def initialize(_arg0); end
 end
 

@@ -38,18 +38,12 @@ class Parser::Base; end
 module Prism
   class << self
     # Mirror the Prism.dump API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def dump(*_arg0); end
 
     # Mirror the Prism.dump_file API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def dump_file(*_arg0); end
 
     # Mirror the Prism.lex API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def lex(*_arg0); end
 
     # :call-seq:
@@ -66,8 +60,6 @@ module Prism
     def lex_compat(source, **options); end
 
     # Mirror the Prism.lex_file API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def lex_file(*_arg0); end
 
     # :call-seq:
@@ -91,80 +83,54 @@ module Prism
     def load(source, serialized, freeze = T.unsafe(nil)); end
 
     # Mirror the Prism.parse API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def parse(*_arg0); end
 
     # Mirror the Prism.parse_comments API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def parse_comments(*_arg0); end
 
     # Mirror the Prism.parse_failure? API by using the serialization API.
     #
     # @return [Boolean]
-    #
-    # source://prism//lib/prism.rb#83
     def parse_failure?(*_arg0); end
 
     # Mirror the Prism.parse_file API by using the serialization API. This uses
     # native strings instead of Ruby strings because it allows us to use mmap
     # when it is available.
-    #
-    # source://prism//lib/prism.rb#83
     def parse_file(*_arg0); end
 
     # Mirror the Prism.parse_file_comments API by using the serialization
     # API. This uses native strings instead of Ruby strings because it allows us
     # to use mmap when it is available.
-    #
-    # source://prism//lib/prism.rb#83
     def parse_file_comments(*_arg0); end
 
     # Mirror the Prism.parse_file_failure? API by using the serialization API.
     #
     # @return [Boolean]
-    #
-    # source://prism//lib/prism.rb#83
     def parse_file_failure?(*_arg0); end
 
     # Mirror the Prism.parse_file_success? API by using the serialization API.
     #
     # @return [Boolean]
-    #
-    # source://prism//lib/prism.rb#83
     def parse_file_success?(*_arg0); end
 
     # Mirror the Prism.parse_lex API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def parse_lex(*_arg0); end
 
     # Mirror the Prism.parse_lex_file API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def parse_lex_file(*_arg0); end
 
     # Mirror the Prism.parse_stream API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def parse_stream(*_arg0); end
 
     # Mirror the Prism.parse_success? API by using the serialization API.
     #
     # @return [Boolean]
-    #
-    # source://prism//lib/prism.rb#83
     def parse_success?(*_arg0); end
 
     # Mirror the Prism.profile API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def profile(*_arg0); end
 
     # Mirror the Prism.profile_file API by using the serialization API.
-    #
-    # source://prism//lib/prism.rb#83
     def profile_file(*_arg0); end
 
     # Create a new scope with the given locals and forwarding options that is
@@ -27740,7 +27706,6 @@ end
 # source://prism//lib/prism/pack.rb#6
 module Prism::Pack
   class << self
-    # source://prism//lib/prism.rb#83
     def parse(_arg0, _arg1, _arg2); end
   end
 end
@@ -33713,22 +33678,16 @@ class Prism::StringQuery
     # Mirrors the C extension's StringQuery::constant? method.
     #
     # @return [Boolean]
-    #
-    # source://prism//lib/prism.rb#83
     def constant?(_arg0); end
 
     # Mirrors the C extension's StringQuery::local? method.
     #
     # @return [Boolean]
-    #
-    # source://prism//lib/prism.rb#83
     def local?(_arg0); end
 
     # Mirrors the C extension's StringQuery::method_name? method.
     #
     # @return [Boolean]
-    #
-    # source://prism//lib/prism.rb#83
     def method_name?(_arg0); end
   end
 end

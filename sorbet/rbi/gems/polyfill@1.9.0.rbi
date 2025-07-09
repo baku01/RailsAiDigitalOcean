@@ -113,17 +113,17 @@ Polyfill::InternalUtils::VERSIONS = T.let(T.unsafe(nil), Hash)
 # source://polyfill//lib/polyfill.rb#5
 module Polyfill::Module; end
 
-# source://polyfill//lib/polyfill/v2_4/enumerable.rb#6
-module Polyfill::Module::Me051bWVyaWM6IFsiI2R1cCJdLCB2ZXJzaW9uOiAiMi40In0_; end
-
 # source://polyfill//lib/polyfill/v2_4/enumerator/lazy.rb#5
-module Polyfill::Module::Me0VudW1lcmFibGU6IFsiI2NodW5rX3doaWxlIl0sIHZlcnNpb246ICIyLjQifQ__; end
+module Polyfill::Module::MezpFbnVtZXJhYmxlPT5bIiNjaHVua193aGlsZSJdLCA6dmVyc2lvbj0_1IjIuNCJ9; end
 
 # source://polyfill//lib/polyfill/v2_5/integer.rb#6
-module Polyfill::Module::Me0ludGVnZXI6IFsiI2NlaWwiLCAiI2Zsb29yIiwgIiNyb3VuZCIsICIjdHJ1bmNhdGUiXSwgdmVyc2lvbjogIjIuNCJ9; end
+module Polyfill::Module::MezpJbnRlZ2VyPT5bIiNjZWlsIiwgIiNmbG9vciIsICIjcm91bmQiLCAiI3RydW5jYXRlIl0sIDp2ZXJzaW9uPT4iMi40In0_; end
 
 # source://polyfill//lib/polyfill/v2_6/kernel.rb#4
-module Polyfill::Module::Me0tlcm5lbDogWyIjeWllbGRfc2VsZiJdLCB2ZXJzaW9uOiAiMi41In0_; end
+module Polyfill::Module::MezpLZXJuZWw9PlsiI3lpZWxkX3NlbGYiXSwgOnZlcnNpb249PiIyLjUifQ__; end
+
+# source://polyfill//lib/polyfill/v2_4/enumerable.rb#6
+module Polyfill::Module::MezpOdW1lcmljPT5bIiNkdXAiXSwgOnZlcnNpb249PiIyLjQifQ__; end
 
 # source://polyfill//lib/polyfill/v2_2/enumerable.rb#2
 module Polyfill::V2_2; end

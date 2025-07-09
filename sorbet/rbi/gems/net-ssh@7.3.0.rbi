@@ -6420,6 +6420,10 @@ Net::SSH::Version::STRING = T.let(T.unsafe(nil), String)
 # source://net-ssh//lib/net/ssh/version.rb#55
 Net::SSH::Version::TINY = T.let(T.unsafe(nil), Integer)
 
+class OpenSSL::ASN1::Constructive < ::OpenSSL::ASN1::ASN1Data
+  include ::Enumerable
+end
+
 # This class is originally defined in the OpenSSL module. As needed, methods
 # have been added to it by the Net::SSH module for convenience in dealing with
 # SSH functionality.
@@ -6597,11 +6601,77 @@ class OpenSSL::PKey::RSA < ::OpenSSL::PKey::PKey
   def to_blob; end
 end
 
-class OpenSSL::Provider; end
+class OpenSSL::Provider
+  def inspect; end
+  def name; end
+  def unload; end
+
+  class << self
+    def load(_arg0); end
+    def provider_names; end
+  end
+end
+
 class OpenSSL::Provider::ProviderError < ::OpenSSL::OpenSSLError; end
 module OpenSSL::Timestamp; end
-class OpenSSL::Timestamp::Factory; end
-class OpenSSL::Timestamp::Request; end
-class OpenSSL::Timestamp::Response; end
+
+class OpenSSL::Timestamp::Factory
+  def additional_certs; end
+  def additional_certs=(_arg0); end
+  def allowed_digests; end
+  def allowed_digests=(_arg0); end
+  def create_timestamp(_arg0, _arg1, _arg2); end
+  def default_policy_id; end
+  def default_policy_id=(_arg0); end
+  def gen_time; end
+  def gen_time=(_arg0); end
+  def serial_number; end
+  def serial_number=(_arg0); end
+end
+
+class OpenSSL::Timestamp::Request
+  def initialize(*_arg0); end
+
+  def algorithm; end
+  def algorithm=(_arg0); end
+  def cert_requested=(_arg0); end
+  def cert_requested?; end
+  def message_imprint; end
+  def message_imprint=(_arg0); end
+  def nonce; end
+  def nonce=(_arg0); end
+  def policy_id; end
+  def policy_id=(_arg0); end
+  def to_der; end
+  def version; end
+  def version=(_arg0); end
+end
+
+class OpenSSL::Timestamp::Response
+  def initialize(_arg0); end
+
+  def failure_info; end
+  def status; end
+  def status_text; end
+  def to_der; end
+  def token; end
+  def token_info; end
+  def tsa_certificate; end
+  def verify(*_arg0); end
+end
+
 class OpenSSL::Timestamp::TimestampError < ::OpenSSL::OpenSSLError; end
-class OpenSSL::Timestamp::TokenInfo; end
+
+class OpenSSL::Timestamp::TokenInfo
+  def initialize(_arg0); end
+
+  def algorithm; end
+  def gen_time; end
+  def message_imprint; end
+  def nonce; end
+  def ordering; end
+  def policy_id; end
+  def serial_number; end
+  def to_der; end
+  def version; end
+end

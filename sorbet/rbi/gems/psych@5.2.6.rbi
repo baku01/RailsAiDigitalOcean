@@ -317,9 +317,6 @@ module Psych
     # source://psych//lib/psych.rb#774
     def dump_tags=(value); end
 
-    # source://psych//lib/psych.rb#15
-    def libyaml_version; end
-
     # Load +yaml+ in to a Ruby data structure.  If multiple documents are
     # provided, the object contained in the first document will be returned.
     # +filename+ will be used in the exception message if any exception
@@ -729,9 +726,6 @@ class Psych::ClassLoader
   # source://psych//lib/psych/class_loader.rb#48
   def find(klassname); end
 
-  # source://psych//lib/psych.rb#15
-  def path2class(_arg0); end
-
   # source://psych//lib/psych/class_loader.rb#52
   def resolve(klassname); end
 end
@@ -888,59 +882,6 @@ class Psych::DisallowedClass < ::Psych::Exception
   #
   # source://psych//lib/psych/exception.rb#24
   def initialize(action, klass_name); end
-end
-
-class Psych::Emitter < ::Psych::Handler
-  # source://psych//lib/psych.rb#15
-  def initialize(*_arg0); end
-
-  # source://psych//lib/psych.rb#15
-  def alias(_arg0); end
-
-  # source://psych//lib/psych.rb#15
-  def canonical; end
-
-  # source://psych//lib/psych.rb#15
-  def canonical=(_arg0); end
-
-  # source://psych//lib/psych.rb#15
-  def end_document(_arg0); end
-
-  # source://psych//lib/psych.rb#15
-  def end_mapping; end
-
-  # source://psych//lib/psych.rb#15
-  def end_sequence; end
-
-  # source://psych//lib/psych.rb#15
-  def end_stream; end
-
-  # source://psych//lib/psych.rb#15
-  def indentation; end
-
-  # source://psych//lib/psych.rb#15
-  def indentation=(_arg0); end
-
-  # source://psych//lib/psych.rb#15
-  def line_width; end
-
-  # source://psych//lib/psych.rb#15
-  def line_width=(_arg0); end
-
-  # source://psych//lib/psych.rb#15
-  def scalar(_arg0, _arg1, _arg2, _arg3, _arg4, _arg5); end
-
-  # source://psych//lib/psych.rb#15
-  def start_document(_arg0, _arg1, _arg2); end
-
-  # source://psych//lib/psych.rb#15
-  def start_mapping(_arg0, _arg1, _arg2, _arg3); end
-
-  # source://psych//lib/psych.rb#15
-  def start_sequence(_arg0, _arg1, _arg2, _arg3); end
-
-  # source://psych//lib/psych.rb#15
-  def start_stream(_arg0); end
 end
 
 # Psych::Handler is an abstract base class that defines the events used
@@ -1876,9 +1817,6 @@ class Psych::Parser
   # source://psych//lib/psych/parser.rb#38
   def handler=(_arg0); end
 
-  # source://psych//lib/psych.rb#15
-  def mark; end
-
   # call-seq:
   #    parser.parse(yaml)
   #
@@ -1889,11 +1827,6 @@ class Psych::Parser
   #
   # source://psych//lib/psych/parser.rb#61
   def parse(yaml, path = T.unsafe(nil)); end
-
-  private
-
-  # source://psych//lib/psych.rb#15
-  def _native_parse(_arg0, _arg1, _arg2); end
 end
 
 # Scan scalars for built in types
@@ -2266,17 +2199,11 @@ class Psych::Visitors::ToRuby < ::Psych::Visitors::Visitor
   # source://psych//lib/psych/visitors/to_ruby.rb#369
   def allocate_anon_data(node, members); end
 
-  # source://psych//lib/psych.rb#15
-  def build_exception(_arg0, _arg1); end
-
   # source://psych//lib/psych/visitors/to_ruby.rb#434
   def deduplicate(key); end
 
   # source://psych//lib/psych/visitors/to_ruby.rb#51
   def deserialize(o); end
-
-  # source://psych//lib/psych.rb#15
-  def init_struct(_arg0, _arg1); end
 
   # source://psych//lib/psych/visitors/to_ruby.rb#451
   def init_with(o, h, node); end

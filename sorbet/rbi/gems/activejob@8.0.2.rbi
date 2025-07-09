@@ -2158,7 +2158,6 @@ end
 #
 # source://activejob//lib/active_job/serializers/object_serializer.rb#26
 class ActiveJob::Serializers::ObjectSerializer
-  include ::Singleton::SingletonInstanceMethods
   include ::Singleton
   extend ::Singleton::SingletonClassMethods
 

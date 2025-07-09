@@ -9,7 +9,7 @@
 
   <meta name="keywords" content="ruby,class,AiApiService">
 
-    <meta name="description" content="class AiApiService: typed: strict">
+    <meta name="description" content="class AiApiService: Service para lidar com a API do AI">
 
 
 <script type="text/javascript">
@@ -112,7 +112,7 @@
 
   <section class="description">
     
-<p>typed: strict</p>
+<p>Service para lidar com a API do AI</p>
 
   </section>
 
@@ -155,7 +155,7 @@
 
         <div class="method-description">
           <div class="method-source-code" id="initialize-source">
-            <pre><span class="ruby-comment"># File app/services/ai_api_service.rb, line 11</span>
+            <pre><span class="ruby-comment"># File app/services/ai_api_service.rb, line 14</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-value">api_key:</span> <span class="ruby-string">&quot;sk-do-F_SW2ifcyA_TtXlIbTU6lEA5uBpev8IyoB0_LkE05tUzlIUaO5Sx1rM5aZ&quot;</span>)
   <span class="ruby-ivar">@api_key</span> = <span class="ruby-constant">T</span>.<span class="ruby-identifier">let</span>(<span class="ruby-identifier">api_key</span>, <span class="ruby-constant">String</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -184,7 +184,7 @@
 
         <div class="method-description">
           <div class="method-source-code" id="list_models-source">
-            <pre><span class="ruby-comment"># File app/services/ai_api_service.rb, line 16</span>
+            <pre><span class="ruby-comment"># File app/services/ai_api_service.rb, line 19</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">list_models</span>
   <span class="ruby-identifier">http_handler</span> = <span class="ruby-constant">T</span>.<span class="ruby-identifier">let</span>(<span class="ruby-constant">HTTParty</span>, <span class="ruby-constant">T</span>.<span class="ruby-identifier">class_of</span>(<span class="ruby-constant">HTTParty</span>))
   <span class="ruby-constant">T</span>.<span class="ruby-identifier">let</span>(

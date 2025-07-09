@@ -57,13 +57,8 @@ module Ed25519::Provider; end
 
 module Ed25519::Provider::Ref10
   class << self
-    # source://ed25519//lib/ed25519.rb#35
     def create_keypair(_arg0); end
-
-    # source://ed25519//lib/ed25519.rb#35
     def sign(_arg0, _arg1); end
-
-    # source://ed25519//lib/ed25519.rb#35
     def verify(_arg0, _arg1, _arg2); end
   end
 end

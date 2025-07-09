@@ -5,7 +5,15 @@
 # Please instead update this file by running `bin/tapioca gem rdoc`.
 
 
-module ERB::Escape; end
+module ERB::Escape
+  private
+
+  def html_escape(_arg0); end
+
+  class << self
+    def html_escape(_arg0); end
+  end
+end
 
 # RDoc produces documentation for Ruby source files by parsing the source and
 # extracting the definition for classes, modules, methods, includes and

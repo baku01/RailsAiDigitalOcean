@@ -833,9 +833,6 @@ module RuboCop::AST::CollectionNode
   def fetch(*_arg0, **_arg1, &_arg2); end
 
   # source://rubocop-ast//lib/rubocop/ast/node/mixin/collection_node.rb#13
-  def fetch_values(*_arg0, **_arg1, &_arg2); end
-
-  # source://rubocop-ast//lib/rubocop/ast/node/mixin/collection_node.rb#13
   def fifth(*_arg0, **_arg1, &_arg2); end
 
   # source://rubocop-ast//lib/rubocop/ast/node/mixin/collection_node.rb#13

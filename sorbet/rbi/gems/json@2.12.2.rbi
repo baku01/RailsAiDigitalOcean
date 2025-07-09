@@ -1785,67 +1785,8 @@ class JSON::Coder
   def parse(source); end
 end
 
-module JSON::Ext::Generator::GeneratorMethods::Array
-  # source://json//lib/json/ext.rb#39
-  def to_json(*_arg0); end
-end
-
-module JSON::Ext::Generator::GeneratorMethods::FalseClass
-  # source://json//lib/json/ext.rb#39
-  def to_json(*_arg0); end
-end
-
-module JSON::Ext::Generator::GeneratorMethods::Float
-  # source://json//lib/json/ext.rb#39
-  def to_json(*_arg0); end
-end
-
-module JSON::Ext::Generator::GeneratorMethods::Hash
-  # source://json//lib/json/ext.rb#39
-  def to_json(*_arg0); end
-end
-
-module JSON::Ext::Generator::GeneratorMethods::Integer
-  # source://json//lib/json/ext.rb#39
-  def to_json(*_arg0); end
-end
-
-module JSON::Ext::Generator::GeneratorMethods::NilClass
-  # source://json//lib/json/ext.rb#39
-  def to_json(*_arg0); end
-end
-
-module JSON::Ext::Generator::GeneratorMethods::Object
-  # source://json//lib/json/ext.rb#39
-  def to_json(*_arg0); end
-end
-
 module JSON::Ext::Generator::GeneratorMethods::String
   mixes_in_class_methods ::JSON::Ext::Generator::GeneratorMethods::String::Extend
-
-  # source://json//lib/json/ext.rb#39
-  def to_json(*_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def to_json_raw(*_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def to_json_raw_object; end
-
-  class << self
-    # source://json//lib/json/ext.rb#39
-    def included(_arg0); end
-  end
-end
-
-module JSON::Ext::Generator::GeneratorMethods::String::Extend
-  # source://json//lib/json/ext.rb#39
-  def json_create(_arg0); end
-end
-
-module JSON::Ext::Generator::GeneratorMethods::TrueClass
-  # source://json//lib/json/ext.rb#39
-  def to_json(*_arg0); end
 end
 
 # source://json//lib/json/ext/generator/state.rb#6
@@ -1871,7 +1812,7 @@ class JSON::Ext::Generator::State
   #
   # @return [State] a new instance of State
   #
-  # source://json//lib/json/ext.rb#39
+  # source://json//lib/json/ext/generator/state.rb#25
   def initialize(opts = T.unsafe(nil)); end
 
   # call-seq: [](name)
@@ -1888,39 +1829,6 @@ class JSON::Ext::Generator::State
   # source://json//lib/json/ext/generator/state.rb#96
   def []=(name, value); end
 
-  # source://json//lib/json/ext.rb#39
-  def allow_nan=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def allow_nan?; end
-
-  # source://json//lib/json/ext.rb#39
-  def array_nl; end
-
-  # source://json//lib/json/ext.rb#39
-  def array_nl=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def as_json; end
-
-  # source://json//lib/json/ext.rb#39
-  def as_json=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def ascii_only=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def ascii_only?; end
-
-  # source://json//lib/json/ext.rb#39
-  def buffer_initial_length; end
-
-  # source://json//lib/json/ext.rb#39
-  def buffer_initial_length=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def check_circular?; end
-
   # call-seq: configure(opts)
   #
   # Configure this State instance with the Hash _opts_, and return
@@ -1929,39 +1837,6 @@ class JSON::Ext::Generator::State
   # source://json//lib/json/ext/generator/state.rb#35
   def configure(opts); end
 
-  # source://json//lib/json/ext.rb#39
-  def depth; end
-
-  # source://json//lib/json/ext.rb#39
-  def depth=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def escape_slash; end
-
-  # source://json//lib/json/ext.rb#39
-  def escape_slash=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def escape_slash?; end
-
-  # source://json//lib/json/ext.rb#39
-  def generate(*_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def generate_new(*_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def indent; end
-
-  # source://json//lib/json/ext.rb#39
-  def indent=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def max_nesting; end
-
-  # source://json//lib/json/ext.rb#39
-  def max_nesting=(_arg0); end
-
   # call-seq: configure(opts)
   #
   # Configure this State instance with the Hash _opts_, and return
@@ -1969,42 +1844,6 @@ class JSON::Ext::Generator::State
   #
   # source://json//lib/json/ext/generator/state.rb#48
   def merge(opts); end
-
-  # source://json//lib/json/ext.rb#39
-  def object_nl; end
-
-  # source://json//lib/json/ext.rb#39
-  def object_nl=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def script_safe; end
-
-  # source://json//lib/json/ext.rb#39
-  def script_safe=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def script_safe?; end
-
-  # source://json//lib/json/ext.rb#39
-  def space; end
-
-  # source://json//lib/json/ext.rb#39
-  def space=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def space_before; end
-
-  # source://json//lib/json/ext.rb#39
-  def space_before=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def strict; end
-
-  # source://json//lib/json/ext.rb#39
-  def strict=(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def strict?; end
 
   # call-seq: to_h
   #
@@ -2021,22 +1860,6 @@ class JSON::Ext::Generator::State
   #
   # source://json//lib/json/ext/generator/state.rb#79
   def to_hash; end
-
-  private
-
-  # source://json//lib/json/ext.rb#39
-  def _configure(_arg0); end
-
-  # source://json//lib/json/ext.rb#39
-  def initialize_copy(_arg0); end
-
-  class << self
-    # source://json//lib/json/ext.rb#39
-    def from_state(_arg0); end
-
-    # source://json//lib/json/ext.rb#39
-    def generate(_arg0, _arg1, _arg2); end
-  end
 end
 
 # source://json//lib/json/ext.rb#9
@@ -2063,14 +1886,6 @@ end
 
 # source://json//lib/json/ext.rb#32
 JSON::Ext::Parser::Config = JSON::Ext::ParserConfig
-
-class JSON::Ext::ParserConfig
-  # source://json//lib/json/ext.rb#31
-  def initialize(_arg0); end
-
-  # source://json//lib/json/ext.rb#31
-  def parse(_arg0); end
-end
 
 # Fragment of JSON document that is to be included as is:
 #   fragment = JSON::Fragment.new("[1, 2, 3]")

@@ -828,7 +828,15 @@ module ERB::DefMethod
   end
 end
 
-module ERB::Escape; end
+module ERB::Escape
+  private
+
+  def html_escape(_arg0); end
+
+  class << self
+    def html_escape(_arg0); end
+  end
+end
 
 # source://erb//lib/erb.rb#355
 ERB::NOT_GIVEN = T.let(T.unsafe(nil), Object)

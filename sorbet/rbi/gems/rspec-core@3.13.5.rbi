@@ -5,7 +5,15 @@
 # Please instead update this file by running `bin/tapioca gem rspec-core`.
 
 
-module ERB::Escape; end
+module ERB::Escape
+  private
+
+  def html_escape(_arg0); end
+
+  class << self
+    def html_escape(_arg0); end
+  end
+end
 
 # Namespace for all core RSpec code.
 #

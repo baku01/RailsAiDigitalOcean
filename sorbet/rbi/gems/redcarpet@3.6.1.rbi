@@ -13,7 +13,6 @@ module Redcarpet; end
 
 # source://redcarpet//lib/redcarpet.rb#7
 class Redcarpet::Markdown
-  # source://redcarpet//lib/redcarpet.rb#1
   def render(_arg0); end
 
   # Returns the value of attribute renderer.
@@ -22,7 +21,6 @@ class Redcarpet::Markdown
   def renderer; end
 
   class << self
-    # source://redcarpet//lib/redcarpet.rb#1
     def new(*_arg0); end
   end
 end
@@ -31,17 +29,14 @@ end
 module Redcarpet::Render; end
 
 class Redcarpet::Render::Base
-  # source://redcarpet//lib/redcarpet.rb#1
   def initialize; end
 end
 
 class Redcarpet::Render::HTML < ::Redcarpet::Render::Base
-  # source://redcarpet//lib/redcarpet.rb#1
   def initialize(*_arg0); end
 end
 
 class Redcarpet::Render::HTML_TOC < ::Redcarpet::Render::Base
-  # source://redcarpet//lib/redcarpet.rb#1
   def initialize(*_arg0); end
 end
 
@@ -106,7 +101,6 @@ end
 module Redcarpet::Render::SmartyPants
   extend ::Redcarpet::Render::SmartyPants
 
-  # source://redcarpet//lib/redcarpet.rb#1
   def postprocess(_arg0); end
 
   class << self

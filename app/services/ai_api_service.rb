@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 # typed: strict
 
+require "sorbet-runtime"
+
+# Service para lidar com a API do AI
 class AiApiService
   class << self
     extend T::Sig

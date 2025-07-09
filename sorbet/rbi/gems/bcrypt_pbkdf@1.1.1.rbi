@@ -27,10 +27,7 @@ end
 
 class BCryptPbkdf::Engine
   class << self
-    # source://bcrypt_pbkdf//lib/bcrypt_pbkdf.rb#5
     def __bc_crypt_hash(_arg0, _arg1); end
-
-    # source://bcrypt_pbkdf//lib/bcrypt_pbkdf.rb#5
     def __bc_crypt_pbkdf(_arg0, _arg1, _arg2, _arg3); end
   end
 end
