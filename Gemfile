@@ -13,6 +13,18 @@ gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
 
+# HTTP client library
+gem "httparty", "~> 0.23.1"
+
+# Observer pattern implementation
+gem "observer", "~> 0.1.2"
+
+# Pattern generator for Rails
+gem "pattern_generator", "~> 0.1.0"
+
+# Markdown processor
+gem "redcarpet", "~> 3.6"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
@@ -34,9 +46,42 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # RSpec testing framework
+  gem "rspec", "~> 3.13", ">= 3.13.1"
+  gem "rspec-rails", "~> 8.0", ">= 8.0.1"
+
+  # Ruby linting and formatting
+  gem "rubocop", "~> 1.78"
+  gem "rubocop-rails", "~> 2.32"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Language Server Protocol for Ruby
+  gem "ruby-lsp", ">= 0.24.0", "< 0.25.0"
+  gem "ruby-lsp-rails", "~> 0.4.6"
+
+  # Solargraph language server
+  gem "solargraph", "~> 0.48.0"
+  gem "solargraph-rails", "~> 1.1"
+
+  # Sorbet type checker
+  gem "sorbet-rails", "~> 0.7.34"
+  gem "sorbet-static-and-runtime", "~> 0.5.12220"
+  gem "sorbet-runtime-stub", "~> 0.2.0"
+
+  # Steep type checker
+  # gem "steep", "~> 1.7"
+
+  # Tapioca RBI generator
+  gem "tapioca", "~> 0.17.6"
+
+  # YARD documentation
+  gem "yard", "~> 0.9.37"
+  gem "yard-kramdown", "~> 0.0.1"
+  gem "yard-solargraph", "~> 0.1.0"
+  gem "yard-sorbet", "~> 0.9.0"
 end

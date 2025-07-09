@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>caching.rbi - RDoc Documentation</title>
+
+  <meta name="keywords" content="ruby,documentation,caching.rbi">
+  <meta name="description" content="caching.rbi: Caching`. Caching`.">
+
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../../../../";
+  var index_rel_prefix = "../../../../";
+</script>
+
+<script src="../../../../js/navigation.js" defer></script>
+<script src="../../../../js/search.js" defer></script>
+<script src="../../../../js/search_index.js" defer></script>
+<script src="../../../../js/searcher.js" defer></script>
+<script src="../../../../js/darkfish.js" defer></script>
+
+<link href="../../../../css/fonts.css" rel="stylesheet">
+<link href="../../../../css/rdoc.css" rel="stylesheet">
+
+
+<body id="top" role="document" class="file">
+<div id="navigation-toggle" role="button" tabindex="0" aria-label="Toggle sidebar" aria-expanded="true" aria-controls="navigation">
+  <span aria-hidden="true">&#9776;</span>
+</div>
+
+
+<nav id="navigation" role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../../../../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../../../../table_of_contents.html#pages">Pages</a>
+    <a href="../../../../table_of_contents.html#classes">Classes</a>
+    <a href="../../../../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search (/) for a class, method, ..." spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+  
+<div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+    <li><a href="../../../../Dockerfile.html">Dockerfile</a>
+    <li><a href="../../../../Gemfile.html">Gemfile</a>
+    <li><a href="../../../../Gemfile_lock.html">Gemfile.lock</a>
+    <li><a href="../../../../README_md.html">README</a>
+    <li><a href="../../../../Rakefile.html">Rakefile</a>
+    <li><details><summary>app</summary>
+    <ul class="link-list">
+      <li><a href="../../../../app/assets/stylesheets/application_css.html">application.css</a>
+      <li><a href="../../../../app/views/pwa/service-worker_js.html">service-worker.js</a>
+    </ul></details>
+    <li><a href="../../../../bin/docker-entrypoint.html">docker-entrypoint</a>
+    <li><a href="../../../../config_ru.html">config.ru</a>
+    <li><details><summary>config</summary>
+    <ul class="link-list">
+      <li><a href="../../../../config/credentials_yml_enc.html">credentials.yml.enc</a>
+      <li><a href="../../../../config/master_key.html">master.key</a>
+    </ul></details>
+    <li><details><summary>log</summary>
+    <ul class="link-list">
+      <li><a href="../../../../log/development_log.html">development.log</a>
+      <li><a href="../../../../log/test_log.html">test.log</a>
+    </ul></details>
+    <li><details><summary>public</summary>
+    <ul class="link-list">
+      <li><a href="../../../../public/400_html.html">400.html</a>
+      <li><a href="../../../../public/404_html.html">404.html</a>
+      <li><a href="../../../../public/406-unsupported-browser_html.html">406-unsupported-browser.html</a>
+      <li><a href="../../../../public/422_html.html">422.html</a>
+      <li><a href="../../../../public/500_html.html">500.html</a>
+      <li><a href="../../../../public/robots_txt.html">robots</a>
+    </ul></details>
+    <li><details open><summary>sorbet</summary>
+    <ul class="link-list">
+      <li><a href="../../../../sorbet/config.html">config</a>
+      <li><a href="../../../../sorbet/rbi/annotations/actionmailer_rbi.html">actionmailer.rbi</a>
+      <li><a href="../../../../sorbet/rbi/annotations/actionpack_rbi.html">actionpack.rbi</a>
+      <li><a href="../../../../sorbet/rbi/annotations/actionview_rbi.html">actionview.rbi</a>
+      <li><a href="../../../../sorbet/rbi/annotations/activejob_rbi.html">activejob.rbi</a>
+      <li><a href="../../../../sorbet/rbi/annotations/activemodel_rbi.html">activemodel.rbi</a>
+      <li><a href="../../../../sorbet/rbi/annotations/activerecord_rbi.html">activerecord.rbi</a>
+      <li><a href="../../../../sorbet/rbi/annotations/activesupport_rbi.html">activesupport.rbi</a>
+      <li><a href="../../../../sorbet/rbi/annotations/globalid_rbi.html">globalid.rbi</a>
+      <li><a href="../../../../sorbet/rbi/annotations/minitest_rbi.html">minitest.rbi</a>
+      <li><a href="../../../../sorbet/rbi/annotations/railties_rbi.html">railties.rbi</a>
+      <li><a href="../../../../sorbet/rbi/annotations/rainbow_rbi.html">rainbow.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/abstract_controller/caching_rbi.html">caching.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/abstract_controller/caching/fragments_rbi.html">fragments.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/abstract_controller/callbacks_rbi.html">callbacks.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/abstract_controller/helpers_rbi.html">helpers.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/abstract_controller/rendering_rbi.html">rendering.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/abstract_controller/url_for_rbi.html">url_for.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/caching_rbi.html">caching.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/conditional_get_rbi.html">conditional_get.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/content_security_policy_rbi.html">content_security_policy.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/data_streaming_rbi.html">data_streaming.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/etag_with_flash_rbi.html">etag_with_flash.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/etag_with_template_digest_rbi.html">etag_with_template_digest.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/flash_rbi.html">flash.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/form_builder_rbi.html">form_builder.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/helpers_rbi.html">helpers.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/params_wrapper_rbi.html">params_wrapper.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/redirecting_rbi.html">redirecting.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/renderers_rbi.html">renderers.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/renderers/all_rbi.html">all.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/request_forgery_protection_rbi.html">request_forgery_protection.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/rescue_rbi.html">rescue.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/test_case/behavior_rbi.html">behavior.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_controller/url_for_rbi.html">url_for.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_dispatch/assertions_rbi.html">assertions.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_dispatch/integration_test_rbi.html">integration_test.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_dispatch/routing/route_set/mounted_helpers_rbi.html">mounted_helpers.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_dispatch/routing/url_for_rbi.html">url_for.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_view/helpers_rbi.html">helpers.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_view/helpers/form_helper_rbi.html">form_helper.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_view/helpers/form_tag_helper_rbi.html">form_tag_helper.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_view/helpers/text_helper_rbi.html">text_helper.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_view/layouts_rbi.html">layouts.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/action_view/rendering_rbi.html">rendering.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_job/callbacks_rbi.html">callbacks.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_job/enqueuing_rbi.html">enqueuing.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_job/exceptions_rbi.html">exceptions.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_job/execution_rbi.html">execution.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_job/logging_rbi.html">logging.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_job/queue_adapter_rbi.html">queue_adapter.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_job/queue_name_rbi.html">queue_name.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_job/queue_priority_rbi.html">queue_priority.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_job/test_helper/test_queue_adapter_rbi.html">test_queue_adapter.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_model/attribute_methods_rbi.html">attribute_methods.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_model/attributes_rbi.html">attributes.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_model/serializers/json_rbi.html">json.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_model/validations_rbi.html">validations.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_model/validations/callbacks_rbi.html">callbacks.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_support/actionable_error_rbi.html">actionable_error.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_support/callbacks_rbi.html">callbacks.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_support/rescuable_rbi.html">rescuable.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/active_support/testing/file_fixtures_rbi.html">file_fixtures.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/application_controller_rbi.html">application_controller.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/base_generator_rbi.html">base_generator.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/form_generator_rbi.html">form_generator.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/generated_path_helpers_module_rbi.html">generated_path_helpers_module.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/generated_url_helpers_rbi.html">generated_url_helpers.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/generated_url_helpers_module_rbi.html">generated_url_helpers_module.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/policy_generator_rbi.html">policy_generator.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/poro_generator_rbi.html">poro_generator.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/service_generator_rbi.html">service_generator.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/time_rbi.html">time.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/turbo/streams/action_broadcast_job_rbi.html">action_broadcast_job.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/turbo/streams/broadcast_job_rbi.html">broadcast_job.rbi</a>
+      <li><a href="../../../../sorbet/rbi/dsl/turbo/streams/broadcast_stream_job_rbi.html">broadcast_stream_job.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/actioncable@8_0_2_rbi.html">actioncable@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/actionmailbox@8_0_2_rbi.html">actionmailbox@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/actionmailer@8_0_2_rbi.html">actionmailer@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/actionpack@8_0_2_rbi.html">actionpack@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/actiontext@8_0_2_rbi.html">actiontext@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/actionview@8_0_2_rbi.html">actionview@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/activejob@8_0_2_rbi.html">activejob@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/activemodel@8_0_2_rbi.html">activemodel@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/activerecord@8_0_2_rbi.html">activerecord@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/activestorage@8_0_2_rbi.html">activestorage@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/activesupport@8_0_2_rbi.html">activesupport@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/ast@2_4_3_rbi.html">ast@2.4.3.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/backport@1_2_0_rbi.html">backport@1.2.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/base64@0_3_0_rbi.html">base64@0.3.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/bcrypt_pbkdf@1_1_1_rbi.html">bcrypt_pbkdf@1.1.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/benchmark@0_4_1_rbi.html">benchmark@0.4.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/bigdecimal@3_2_2_rbi.html">bigdecimal@3.2.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/bindex@0_8_1_rbi.html">bindex@0.8.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/brakeman@7_0_2_rbi.html">brakeman@7.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/commander@5_0_0_rbi.html">commander@5.0.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/concurrent-ruby@1_3_5_rbi.html">concurrent-ruby@1.3.5.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/connection_pool@2_5_3_rbi.html">connection_pool@2.5.3.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/crass@1_0_6_rbi.html">crass@1.0.6.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/csv@3_3_5_rbi.html">csv@3.3.5.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/date@3_4_1_rbi.html">date@3.4.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/diff-lcs@1_6_2_rbi.html">diff-lcs@1.6.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/dotenv@3_1_8_rbi.html">dotenv@3.1.8.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/drb@2_2_3_rbi.html">drb@2.2.3.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/e2mmap@0_1_0_rbi.html">e2mmap@0.1.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/ed25519@1_4_0_rbi.html">ed25519@1.4.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/erb@5_0_1_rbi.html">erb@5.0.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/erubi@1_13_1_rbi.html">erubi@1.13.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/globalid@1_2_1_rbi.html">globalid@1.2.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/highline@3_0_1_rbi.html">highline@3.0.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/httparty@0_23_1_rbi.html">httparty@0.23.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/i18n@1_14_7_rbi.html">i18n@1.14.7.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/importmap-rails@2_1_0_rbi.html">importmap-rails@2.1.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/io-console@0_8_0_rbi.html">io-console@0.8.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/jaro_winkler@1_6_1_rbi.html">jaro_winkler@1.6.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/json@2_12_2_rbi.html">json@2.12.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/kamal@2_7_0_rbi.html">kamal@2.7.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/kramdown-parser-gfm@1_1_0_rbi.html">kramdown-parser-gfm@1.1.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/kramdown@2_5_1_rbi.html">kramdown@2.5.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/language_server-protocol@3_17_0_5_rbi.html">language_server-protocol@3.17.0.5.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/lint_roller@1_1_0_rbi.html">lint_roller@1.1.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/logger@1_7_0_rbi.html">logger@1.7.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/loofah@2_24_1_rbi.html">loofah@2.24.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/mail@2_8_1_rbi.html">mail@2.8.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/marcel@1_0_4_rbi.html">marcel@1.0.4.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/method_source@1_1_0_rbi.html">method_source@1.1.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/mini_mime@1_1_5_rbi.html">mini_mime@1.1.5.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/minitest@5_25_5_rbi.html">minitest@5.25.5.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/multi_xml@0_7_2_rbi.html">multi_xml@0.7.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/net-imap@0_5_9_rbi.html">net-imap@0.5.9.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/net-pop@0_1_2_rbi.html">net-pop@0.1.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/net-protocol@0_2_2_rbi.html">net-protocol@0.2.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/net-scp@4_1_0_rbi.html">net-scp@4.1.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/net-sftp@4_0_0_rbi.html">net-sftp@4.0.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/net-smtp@0_5_1_rbi.html">net-smtp@0.5.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/net-ssh@7_3_0_rbi.html">net-ssh@7.3.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/netrc@0_11_0_rbi.html">netrc@0.11.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/nio4r@2_7_4_rbi.html">nio4r@2.7.4.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/observer@0_1_2_rbi.html">observer@0.1.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/ostruct@0_6_2_rbi.html">ostruct@0.6.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/parallel@1_27_0_rbi.html">parallel@1.27.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/parlour@9_1_2_rbi.html">parlour@9.1.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/parser@3_3_8_0_rbi.html">parser@3.3.8.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/pattern_generator@0_1_0_rbi.html">pattern_generator@0.1.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/polyfill@1_9_0_rbi.html">polyfill@1.9.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/pp@0_6_2_rbi.html">pp@0.6.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/prettyprint@0_2_0_rbi.html">prettyprint@0.2.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/prism@1_4_0_rbi.html">prism@1.4.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/propshaft@1_1_0_rbi.html">propshaft@1.1.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/psych@5_2_6_rbi.html">psych@5.2.6.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/puma@6_6_0_rbi.html">puma@6.6.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/racc@1_8_1_rbi.html">racc@1.8.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rack-session@2_1_1_rbi.html">rack-session@2.1.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rack-test@2_2_0_rbi.html">rack-test@2.2.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rack@3_1_16_rbi.html">rack@3.1.16.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rackup@2_2_1_rbi.html">rackup@2.2.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rails-dom-testing@2_3_0_rbi.html">rails-dom-testing@2.3.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rails-html-sanitizer@1_6_2_rbi.html">rails-html-sanitizer@1.6.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rails@8_0_2_rbi.html">rails@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/railties@8_0_2_rbi.html">railties@8.0.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rainbow@3_1_1_rbi.html">rainbow@3.1.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rake@13_3_0_rbi.html">rake@13.3.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rbi@0_3_6_rbi.html">rbi@0.3.6.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rbs@4_0_0_dev_4_rbi.html">rbs@4.0.0.dev.4.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rdoc@6_14_2_rbi.html">rdoc@6.14.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/regexp_parser@2_10_0_rbi.html">regexp_parser@2.10.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/reline@0_6_1_rbi.html">reline@0.6.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/require-hooks@0_2_2_rbi.html">require-hooks@0.2.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/reverse_markdown@2_1_1_rbi.html">reverse_markdown@2.1.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rspec-core@3_13_5_rbi.html">rspec-core@3.13.5.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rspec-expectations@3_13_5_rbi.html">rspec-expectations@3.13.5.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rspec-mocks@3_13_5_rbi.html">rspec-mocks@3.13.5.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rspec-rails@8_0_1_rbi.html">rspec-rails@8.0.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rspec-support@3_13_4_rbi.html">rspec-support@3.13.4.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rspec@3_13_1_rbi.html">rspec@3.13.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rubocop-ast@1_45_1_rbi.html">rubocop-ast@1.45.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rubocop-performance@1_25_0_rbi.html">rubocop-performance@1.25.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rubocop-rails-omakase@1_1_0_rbi.html">rubocop-rails-omakase@1.1.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rubocop-rails@2_32_0_rbi.html">rubocop-rails@2.32.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/rubocop@1_78_0_rbi.html">rubocop@1.78.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/ruby-lsp-rails@0_4_6_rbi.html">ruby-lsp-rails@0.4.6.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/ruby-lsp@0_24_2_rbi.html">ruby-lsp@0.24.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/ruby-progressbar@1_13_0_rbi.html">ruby-progressbar@1.13.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/safe_type@1_1_1_rbi.html">safe_type@1.1.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/securerandom@0_4_1_rbi.html">securerandom@0.4.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/solargraph-rails@1_1_2_rbi.html">solargraph-rails@1.1.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/solargraph@0_48_0_rbi.html">solargraph@0.48.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/sorbet-coerce@0_7_0_rbi.html">sorbet-coerce@0.7.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/sorbet-rails@0_7_34_rbi.html">sorbet-rails@0.7.34.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/spoom@1_7_4_rbi.html">spoom@1.7.4.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/sshkit@1_24_0_rbi.html">sshkit@1.24.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/stimulus-rails@1_3_4_rbi.html">stimulus-rails@1.3.4.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/stringio@3_1_7_rbi.html">stringio@3.1.7.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/tapioca@0_17_6_rbi.html">tapioca@0.17.6.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/thor@1_3_2_rbi.html">thor@1.3.2.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/thruster@0_1_14_rbi.html">thruster@0.1.14.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/tilt@2_6_1_rbi.html">tilt@2.6.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/timeout@0_4_3_rbi.html">timeout@0.4.3.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/turbo-rails@2_0_16_rbi.html">turbo-rails@2.0.16.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/tzinfo@2_0_6_rbi.html">tzinfo@2.0.6.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/unicode-display_width@3_1_4_rbi.html">unicode-display_width@3.1.4.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/unicode-emoji@4_0_4_rbi.html">unicode-emoji@4.0.4.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/uri@1_0_3_rbi.html">uri@1.0.3.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/useragent@0_16_11_rbi.html">useragent@0.16.11.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/web-console@4_2_1_rbi.html">web-console@4.2.1.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/websocket-driver@0_8_0_rbi.html">websocket-driver@0.8.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/websocket-extensions@0_1_5_rbi.html">websocket-extensions@0.1.5.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/yard-sorbet@0_9_0_rbi.html">yard-sorbet@0.9.0.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/yard@0_9_37_rbi.html">yard@0.9.37.rbi</a>
+      <li><a href="../../../../sorbet/rbi/gems/zeitwerk@2_7_3_rbi.html">zeitwerk@2.7.3.rbi</a>
+      <li><a href="../../../../sorbet/rbi/todo_rbi.html">todo.rbi</a>
+    </ul></details>
+  </ul>
+</div>
+
+
+  <footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.14.2.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
+</nav>
+
+<main role="main" aria-label="Page sorbet/rbi/dsl/action_controller/caching.rbi">
+
+<p># typed: true</p>
+
+<p># DO NOT EDIT MANUALLY # This is an autogenerated file for dynamic methods in ‘ActionController::Caching`. # Please instead update this file by running `bin/tapioca dsl ActionController::Caching`.</p>
+
+<p>module ActionController::Caching</p>
+
+<pre class="ruby"><span class="ruby-identifier">include</span> <span class="ruby-constant">GeneratedInstanceMethods</span>
+
+<span class="ruby-identifier">mixes_in_class_methods</span> <span class="ruby-constant">GeneratedClassMethods</span>
+
+<span class="ruby-keyword">module</span> <span class="ruby-constant">GeneratedClassMethods</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_view_cache_dependencies</span>; <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_view_cache_dependencies=</span>(<span class="ruby-identifier">value</span>); <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_view_cache_dependencies?</span>; <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fragment_cache_keys</span>; <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fragment_cache_keys=</span>(<span class="ruby-identifier">value</span>); <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fragment_cache_keys?</span>; <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-keyword">module</span> <span class="ruby-constant">GeneratedInstanceMethods</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_view_cache_dependencies</span>; <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_view_cache_dependencies=</span>(<span class="ruby-identifier">value</span>); <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_view_cache_dependencies?</span>; <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fragment_cache_keys</span>; <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fragment_cache_keys=</span>(<span class="ruby-identifier">value</span>); <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fragment_cache_keys?</span>; <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>end</p>
+
+</main>
+
