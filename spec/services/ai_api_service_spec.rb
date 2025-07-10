@@ -1,17 +1,14 @@
 # typed: false
 
 require 'rails_helper'
+require 'sorbet-runtime'
 
 RSpec.describe AiApiService, type: :service do
-  context 'when the request is successful' do
-    it 'returns the expected response' do
-      # Your test code here
-    end
-  end
-
-  context 'when the request fails' do
-    it 'raises an error' do
-      # Your test code here
+  describe '#list_models' do
+    it 'retorna uma lista de modelos da API' do
+      api_handler = AiApiService.new
+      response = api_handler.list_models
+      expect(HTTParty::Response)
     end
   end
 end

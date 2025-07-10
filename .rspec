@@ -1,3 +1,2 @@
-<rewrite_this>
 --require spec_helper
 --format documentation
