@@ -7,12 +7,10 @@ require "sorbet-runtime"
 class AiApiService
     extend T::Sig
 
-    CONSULT_URL = T.let("https://inference.do-ai.run/v1/models", String)
-    AWSWER_URL = T.let("https://inference.do-ai.run/v1/chat/completions", String)
     @@http_handler = T.let(HTTParty, T.class_of(HTTParty))
 
     sig { params(api_key: String).void }
-    def initialize(api_key: "sk-do-F_SW2ifcyA_TtXlIbTU6lEA5uBpev8IyoB0_LkE05tUzlIUaO5Sx1rM5aZ")
+    def initialize(api_key: ApiFormatter.parse_to_string(text: ENV["DIGITAL_OCEAN_API"]))
       @api_key = T.let(api_key, String)
     end
 
@@ -20,7 +18,7 @@ class AiApiService
     def list_models
       T.let(
         @@http_handler.get(
-          CONSULT_URL,
+          ApiFormatter.parse_to_string(text: ENV["CONSULT_URL"]),
           headers: {
             "Authorization" => "Bearer #{@api_key}"
           }
@@ -32,7 +30,7 @@ class AiApiService
     def answer(question:, model:, temperature:, max_tokens:)
       T.let(
         @@http_handler.post(
-          AWSWER_URL,
+          ApiFormatter.parse_to_string(text: ENV["AWSER_URL"]),
           headers: {
             "Authorization" => "Bearer #{@api_key}",
             "Content-Type" => "application/json" },
