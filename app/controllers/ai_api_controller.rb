@@ -5,34 +5,36 @@ require "sorbet-runtime"
 class AiApiController < ApplicationController
   extend T::Sig
 
+  skip_before_action :verify_authenticity_token
+
   sig { void }
   def initialize
     @api_handler = T.let(AiApiService.new, AiApiService)
   end
 
-  sig { returns(String) }
+  sig { returns(T.nilable(String)) }
   def list_models
-    T.let(ApiFormatter.parse_to_string(
-      text: @api_handler.list_models),
-    String
+    response = T.let(@api_handler.list_models, HTTParty::Response)
+    ApiFormatter.parse_to_string(text: response)
+  end
+
+  sig { returns(HTTParty::Response) }
+  def answer
+    @api_handler.answer(
+      question: ApiFormatter.
+        parse_to_string(text: T.let(answer_params[:question], T.any(String, NilClass))),
+      model: ApiFormatter.
+        parse_to_string(text: T.let(answer_params[:model], T.any(String, NilClass))),
+      temperature: ApiFormatter.
+        parse_to_float(value: T.let(answer_params[:temperature], T.any(String, NilClass))),
+      max_tokens: ApiFormatter.
+        parse_to_int(value: T.let(answer_params[:max_tokens], T.any(String, NilClass)))
     )
   end
 
-  sig { returns(String) }
-  def answer
-    permitted = permitted_params
-    T.let(ApiFormatter.parse_to_string(text: @api_handler.answer(
-      question: T.let(permitted[:question], String),
-      model: T.let(permitted[:model], String),
-      temperature: T.let(permitted[:temperature], Float),
-      max_tokens: T.let(permitted[:max_tokens], Integer)
-    )), String)
-  end
 
-  private
-    sig { returns(T::Hash[Symbol, T.untyped]) }
-    def permitted_params
-      action_params = T.cast(params.require(:params), ActionController::Parameters)
-      action_params.permit(:question, :model, :temperature, :max_tokens).to_h
-    end
+  sig { returns(ActionController::Parameters) }
+  def answer_params
+    params.permit(:question, :model, :temperature, :max_tokens)
+  end
 end

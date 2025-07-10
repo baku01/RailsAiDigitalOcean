@@ -1,2 +1,24 @@
 <h1>AiApi#answer</h1>
 <p>Find me in app/views/ai_api/answer.html.erb</p>
+<p>Required parameters:</p>
+<ul>
+  <li>question: String</li>
+  <li>model: String</li>
+  <li>temperature: Float</li>
+  <li>max_tokens: Integer</li>
+</ul>
+<form action="/ai_api/answer" method="post">
+  <label for="question">Question:</label>
+  <input type="text" id="question" name="question" required>
+
+  <label for="model">Model:</label>
+  <input type="text" id="model" name="model" required>
+
+  <label for="temperature">Temperature:</label>
+  <input type="number" id="temperature" name="temperature" step="0.01" required>
+
+  <label for="max_tokens">Max Tokens:</label>
+  <input type="number" id="max_tokens" name="max_tokens" required>
+
+  <button type="submit">Submit</button>
+</form>
