@@ -1,61 +1,181 @@
-
 // app/javascript/controllers/chat_controller.js
 import { Controller } from "@hotwired/stimulus"
 
-
-// Connects to data-controller="chat"
 export default class extends Controller {
   static targets = [
+    "messagesContainer",
+    "messageInput",
+    "sendButton",
     "settingsPanel",
     "modelSelect",
     "temperatureInput",
-    "temperatureError",
     "maxTokensInput",
+    "temperatureError",
     "maxTokensError",
     "themeSwitch",
-    "messagesContainer",
     "emptyState",
-    "messageInput",
-    "sendButton",
     "toast",
     "toastMessage"
   ]
 
-  // Settings keys for localStorage
-  static STORAGE_KEY = "ai_chat_settings"
-
-  // Initialize controller
-  connect() {
-    this.loadSettings()
-    this.initializeSpeechRecognition()
-    this.setupKeyboardShortcuts()
-    this.setupClickOutsideHandler()
-
-    // Remove loading indicator if exists
-    const loadingIndicator = document.getElementById('app-loading')
-    if (loadingIndicator) {
-      loadingIndicator.style.display = 'none'
-    }
-
-    // Focus on message input
-    this.messageInputTarget.focus()
+  static values = {
+    storageKey: { type: String, default: 'ai-chat-settings' },
+    apiEndpoint: { type: String, default: '/ai_api/answer' },
+    modelsEndpoint: { type: String, default: '/ai_api/list_models' }
   }
 
+  connect() {
+    this.markdownProcessor = new MarkdownProcessor()
+    this.setupEventListeners()
+    this.initializeSpeechRecognition()
+    this.loadSettings()
+    this.loadAvailableModels()
+    this.hideLoadingIndicator()
+  }
+
+  disconnect() {
+    this.cleanup()
+  }
+
+  // ==================
+  // Initialization
+  // ==================
+
+  hideLoadingIndicator() {
+    const loadingEl = document.getElementById('app-loading')
+    if (loadingEl) {
+      loadingEl.style.display = 'none'
+    }
+  }
+
+  setupEventListeners() {
+    this.setupKeyboardShortcuts()
+    this.setupClickOutsideHandler()
+  }
+
+  // ==================
+  // Model Management
+  // ==================
+
+  async loadAvailableModels() {
+    try {
+      this.setModelLoadingState(true)
+
+      const response = await fetch(this.modelsEndpointValue, {
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json'
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const data = await response.json()
+
+      if (data.models && Array.isArray(data.models)) {
+        this.populateModelSelect(data.models)
+
+        if (!data.success) {
+          this.showToast('Usando modelos padrão devido a erro na API', 'warning')
+        }
+      } else {
+        throw new Error('Invalid response format')
+      }
+
+    } catch (error) {
+      console.error('Error loading models:', error)
+      this.populateModelSelect(this.getFallbackModels())
+      this.showToast('Erro ao carregar modelos. Usando modelos padrão.', 'error')
+    } finally {
+      this.setModelLoadingState(false)
+    }
+  }
+
+  setModelLoadingState(loading) {
+    if (loading) {
+      this.modelSelectTarget.innerHTML = '<option value="">Carregando modelos...</option>'
+      this.modelSelectTarget.disabled = true
+    } else {
+      this.modelSelectTarget.disabled = false
+    }
+  }
+
+  populateModelSelect(models) {
+    this.modelSelectTarget.innerHTML = ''
+
+    models.forEach(model => {
+      const option = document.createElement('option')
+      option.value = model.id
+      option.textContent = model.name || this.formatModelName(model.id)
+      this.modelSelectTarget.appendChild(option)
+    })
+
+    this.restoreSavedModelSelection(models)
+  }
+
+  restoreSavedModelSelection(models) {
+    const savedSettings = this.getSavedSettings()
+    if (savedSettings?.model) {
+      const modelExists = models.find(m => m.id === savedSettings.model)
+      if (modelExists) {
+        this.modelSelectTarget.value = savedSettings.model
+      }
+    }
+  }
+
+  getFallbackModels() {
+    return [
+      { id: "meta-llama/Meta-Llama-3.1-8B-Instruct", name: "Llama 3.1 8B" },
+      { id: "meta-llama/Meta-Llama-3.1-70B-Instruct", name: "Llama 3.1 70B" },
+      { id: "meta-llama/Meta-Llama-3.1-405B-Instruct", name: "Llama 3.1 405B" },
+      { id: "mistralai/Mistral-7B-Instruct-v0.3", name: "Mistral 7B" },
+      { id: "mistralai/Mixtral-8x7B-Instruct-v0.1", name: "Mixtral 8x7B" }
+    ]
+  }
+
+  formatModelName(modelId) {
+    const formatMap = {
+      'meta-llama/Meta-Llama-': 'Llama ',
+      'mistralai/': '',
+      '-Instruct': '',
+      '-v0.3': '',
+      '-v0.1': '',
+      'Mistral-': 'Mistral ',
+      'Mixtral-': 'Mixtral '
+    }
+
+    let name = modelId
+    Object.entries(formatMap).forEach(([pattern, replacement]) => {
+      name = name.replace(pattern, replacement)
+    })
+
+    return name
+  }
+
+  async refreshModels() {
+    await this.loadAvailableModels()
+    this.showToast('Modelos atualizados!', 'success')
+  }
+
+  // ==================
   // Settings Management
-  // ===================
+  // ==================
 
   toggleSettings(event) {
-    event.preventDefault()
+    event?.preventDefault()
     const isOpen = this.settingsPanelTarget.getAttribute('aria-hidden') === 'false'
     this.settingsPanelTarget.setAttribute('aria-hidden', isOpen ? 'true' : 'false')
   }
 
   closeSettings(event) {
-    event.preventDefault()
+    event?.preventDefault()
     this.settingsPanelTarget.setAttribute('aria-hidden', 'true')
   }
 
-  saveSettings(event) {
+  async saveSettings(event) {
     event.preventDefault()
 
     if (!this.validateSettings()) {
@@ -69,30 +189,53 @@ export default class extends Controller {
       dark_theme: this.themeSwitchTarget.checked
     }
 
-    localStorage.setItem(this.constructor.STORAGE_KEY, JSON.stringify(settings))
+    localStorage.setItem(this.storageKeyValue, JSON.stringify(settings))
     this.showToast('Configurações salvas com sucesso!', 'success')
-    this.settingsPanelTarget.setAttribute('aria-hidden', 'true')
+    this.closeSettings()
   }
 
   loadSettings() {
-    const savedSettings = localStorage.getItem(this.constructor.STORAGE_KEY)
+    const savedSettings = this.getSavedSettings()
 
     if (savedSettings) {
-      const settings = JSON.parse(savedSettings)
-
-      this.modelSelectTarget.value = settings.model || 'gpt-3.5-turbo'
-      this.temperatureInputTarget.value = settings.temperature || 0.7
-      this.maxTokensInputTarget.value = settings.max_tokens || 1000
-
-      if (settings.dark_theme) {
-        this.themeSwitchTarget.checked = true
-        document.body.classList.add('dark-theme')
-      }
+      this.applySettings(savedSettings)
     }
   }
 
+  applySettings(settings) {
+    if (settings.model) this.modelSelectTarget.value = settings.model
+    if (settings.temperature !== undefined) this.temperatureInputTarget.value = settings.temperature
+    if (settings.max_tokens !== undefined) this.maxTokensInputTarget.value = settings.max_tokens
+
+    if (settings.dark_theme) {
+      this.themeSwitchTarget.checked = true
+      document.body.classList.add('dark-theme')
+    }
+  }
+
+  getSavedSettings() {
+    try {
+      const savedSettings = localStorage.getItem(this.storageKeyValue)
+      return savedSettings ? JSON.parse(savedSettings) : null
+    } catch (error) {
+      console.error('Error parsing saved settings:', error)
+      return null
+    }
+  }
+
+  getCurrentSettings() {
+    const savedSettings = this.getSavedSettings()
+
+    return {
+      model: savedSettings?.model || 'meta-llama/Meta-Llama-3.1-70B-Instruct',
+      temperature: savedSettings?.temperature ?? 0.7,
+      max_tokens: savedSettings?.max_tokens ?? 1000
+    }
+  }
+
+  // ==================
   // Validation
-  // ==========
+  // ==================
 
   validateSettings() {
     const tempValid = this.validateTemperature()
@@ -104,8 +247,11 @@ export default class extends Controller {
     const value = parseFloat(this.temperatureInputTarget.value)
     const isValid = !isNaN(value) && value >= 0 && value <= 2
 
-    this.temperatureInputTarget.classList.toggle('error', !isValid)
-    this.temperatureErrorTarget.classList.toggle('active', !isValid)
+    this.toggleValidationState(
+      this.temperatureInputTarget,
+      this.temperatureErrorTarget,
+      isValid
+    )
 
     return isValid
   }
@@ -114,65 +260,61 @@ export default class extends Controller {
     const value = parseInt(this.maxTokensInputTarget.value)
     const isValid = !isNaN(value) && value >= 1 && value <= 4000
 
-    this.maxTokensInputTarget.classList.toggle('error', !isValid)
-    this.maxTokensErrorTarget.classList.toggle('active', !isValid)
+    this.toggleValidationState(
+      this.maxTokensInputTarget,
+      this.maxTokensErrorTarget,
+      isValid
+    )
 
     return isValid
   }
 
+  toggleValidationState(input, error, isValid) {
+    input.classList.toggle('error', !isValid)
+    error.classList.toggle('active', !isValid)
+  }
+
+  // ==================
   // Theme Management
-  // ================
+  // ==================
 
   toggleTheme() {
     document.body.classList.toggle('dark-theme', this.themeSwitchTarget.checked)
   }
 
+  // ==================
   // Message Handling
-  // ================
+  // ==================
 
   async sendMessage(event) {
-    event.preventDefault()
+    event?.preventDefault()
 
     const message = this.messageInputTarget.value.trim()
     if (!message) return
 
-    // Hide empty state
-    if (this.hasEmptyStateTarget) {
-      this.emptyStateTarget.style.display = 'none'
-    }
-
-    // Add user message
+    this.hideEmptyState()
     this.addMessage(message, 'user')
+    this.clearInput()
+    this.setInputState(false)
 
-    // Clear input
-    this.messageInputTarget.value = ''
-    this.adjustTextareaHeight()
-
-    // Disable send button
-    this.sendButtonTarget.disabled = true
-
-    // Add loading message
     const loadingId = this.addLoadingMessage()
 
     try {
       const response = await this.sendMessageToAPI(message)
-
-      // Remove loading message
       this.removeLoadingMessage(loadingId)
 
-      // Add AI response
       if (response.answer) {
-        this.addMessageWithTypingEffect(response.answer, 'ai')
+        this.addMessage(response.answer, 'ai')
       } else {
-        this.addMessage('Desculpe, não consegui processar sua solicitação.', 'ai')
+        throw new Error('Empty response from API')
       }
     } catch (error) {
-      console.error('Erro:', error)
+      console.error('Error:', error)
       this.removeLoadingMessage(loadingId)
-      this.addMessage('Erro ao processar solicitação. Por favor, tente novamente.', 'ai')
+      this.addMessage('Erro ao processar solicitação. Por favor, tente novamente.', 'ai', 'error')
       this.showToast('Erro ao processar solicitação.', 'error')
     } finally {
-      this.sendButtonTarget.disabled = false
+      this.setInputState(true)
       this.messageInputTarget.focus()
     }
   }
@@ -181,16 +323,14 @@ export default class extends Controller {
     const formData = new FormData()
     formData.append('question', message)
 
-    // Add settings
     const settings = this.getCurrentSettings()
-    formData.append('model', settings.model)
-    formData.append('temperature', settings.temperature)
-    formData.append('max_tokens', settings.max_tokens)
+    Object.entries(settings).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
 
-    // Get CSRF token
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').content
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content
 
-    const response = await fetch('/ai_api/answer', {
+    const response = await fetch(this.apiEndpointValue, {
       method: 'POST',
       body: formData,
       headers: {
@@ -199,40 +339,57 @@ export default class extends Controller {
     })
 
     if (!response.ok) {
-      throw new Error('Erro na resposta do servidor')
+      throw new Error(`Server error: ${response.status}`)
     }
 
     return await response.json()
   }
 
-  getCurrentSettings() {
-    const savedSettings = localStorage.getItem(this.constructor.STORAGE_KEY)
+  // ==================
+  // Message UI
+  // ==================
 
-    if (savedSettings) {
-      return JSON.parse(savedSettings)
-    }
-
-    return {
-      model: 'gpt-3.5-turbo',
-      temperature: 0.7,
-      max_tokens: 1000
-    }
+  addMessage(content, role, type = 'normal') {
+    const messageEl = this.createMessageElement(content, role, type)
+    this.messagesContainerTarget.appendChild(messageEl)
+    this.scrollToBottom()
+    return messageEl
   }
 
-  // Message UI
-  // ==========
-
-  addMessage(content, role) {
+  createMessageElement(content, role, type) {
     const messageDiv = document.createElement('div')
-    messageDiv.className = 'message'
+    messageDiv.className = `message ${type === 'error' ? 'message-error' : ''}`
 
+    const avatar = this.createAvatar(role)
+    const contentDiv = this.createMessageContent(content, role)
+
+    messageDiv.appendChild(avatar)
+    messageDiv.appendChild(contentDiv)
+
+    return messageDiv
+  }
+
+  createAvatar(role) {
     const avatar = document.createElement('div')
     avatar.className = `message-avatar ${role}-avatar`
     avatar.textContent = role === 'user' ? 'U' : 'AI'
+    return avatar
+  }
 
+  createMessageContent(content, role) {
     const contentDiv = document.createElement('div')
     contentDiv.className = 'message-content'
 
+    const roleDiv = this.createRoleElement(role)
+    const textDiv = this.createTextElement(content, role)
+
+    contentDiv.appendChild(roleDiv)
+    contentDiv.appendChild(textDiv)
+
+    return contentDiv
+  }
+
+  createRoleElement(role) {
     const roleDiv = document.createElement('div')
     roleDiv.className = 'message-role'
 
@@ -240,48 +397,32 @@ export default class extends Controller {
       roleDiv.textContent = 'Você'
     } else {
       const settings = this.getCurrentSettings()
-      const model = this.formatModelName(settings.model)
-      roleDiv.innerHTML = `Assistente <span class="badge">${model}</span>`
+      const modelName = this.formatModelName(settings.model)
+      roleDiv.innerHTML = `Assistente <span class="badge">${modelName}</span>`
     }
 
-    const textDiv = document.createElement('div')
-    textDiv.className = 'message-text'
-    textDiv.textContent = content
-
-    contentDiv.appendChild(roleDiv)
-    contentDiv.appendChild(textDiv)
-
-    messageDiv.appendChild(avatar)
-    messageDiv.appendChild(contentDiv)
-
-    this.messagesContainerTarget.appendChild(messageDiv)
-    this.scrollToBottom()
-
-    return messageDiv
+    return roleDiv
   }
 
-  addMessageWithTypingEffect(content, role) {
-    const messageDiv = this.addMessage('', role)
-    const textDiv = messageDiv.querySelector('.message-text')
+  createTextElement(content, role) {
+    const textDiv = document.createElement('div')
+    textDiv.className = 'message-text'
 
-    messageDiv.classList.add('typing-animation')
-    textDiv.style.opacity = '1'
-
-    let i = 0
-    const characters = content.split('')
-
-    const typeNextChar = () => {
-      if (i < characters.length) {
-        textDiv.textContent += characters[i]
-        i++
-        this.scrollToBottom()
-        requestAnimationFrame(() => setTimeout(typeNextChar, 15))
-      } else {
-        messageDiv.classList.remove('typing-animation')
-      }
+    if (role === 'ai' && this.markdownProcessor) {
+      textDiv.innerHTML = this.markdownProcessor.processMarkdown(content)
+      this.highlightCodeBlocks(textDiv)
+    } else {
+      textDiv.textContent = content
     }
 
-    typeNextChar()
+    return textDiv
+  }
+
+  highlightCodeBlocks(element) {
+    const codeBlocks = element.querySelectorAll('pre code')
+    codeBlocks.forEach(block => {
+      block.classList.add('language-auto')
+    })
   }
 
   addLoadingMessage() {
@@ -289,26 +430,8 @@ export default class extends Controller {
     messageDiv.className = 'message'
     messageDiv.id = `loading-${Date.now()}`
 
-    const avatar = document.createElement('div')
-    avatar.className = 'message-avatar ai-avatar'
-    avatar.textContent = 'AI'
-
-    const contentDiv = document.createElement('div')
-    contentDiv.className = 'message-content'
-
-    const roleDiv = document.createElement('div')
-    roleDiv.className = 'message-role'
-
-    const settings = this.getCurrentSettings()
-    const model = this.formatModelName(settings.model)
-    roleDiv.innerHTML = `Assistente <span class="badge">${model}</span>`
-
-    const loadingDiv = document.createElement('div')
-    loadingDiv.className = 'loading-dots'
-    loadingDiv.innerHTML = '<span></span><span></span><span></span>'
-
-    contentDiv.appendChild(roleDiv)
-    contentDiv.appendChild(loadingDiv)
+    const avatar = this.createAvatar('ai')
+    const contentDiv = this.createLoadingContent()
 
     messageDiv.appendChild(avatar)
     messageDiv.appendChild(contentDiv)
@@ -319,38 +442,62 @@ export default class extends Controller {
     return messageDiv.id
   }
 
+  createLoadingContent() {
+    const contentDiv = document.createElement('div')
+    contentDiv.className = 'message-content'
+
+    const roleDiv = this.createRoleElement('ai')
+    const loadingDiv = document.createElement('div')
+    loadingDiv.className = 'loading-dots'
+    loadingDiv.innerHTML = '<span></span><span></span><span></span>'
+
+    contentDiv.appendChild(roleDiv)
+    contentDiv.appendChild(loadingDiv)
+
+    return contentDiv
+  }
+
   removeLoadingMessage(id) {
     const loadingMessage = document.getElementById(id)
-    if (loadingMessage) {
-      loadingMessage.remove()
+    loadingMessage?.remove()
+  }
+
+  // ==================
+  // UI Helpers
+  // ==================
+
+  hideEmptyState() {
+    if (this.hasEmptyStateTarget) {
+      this.emptyStateTarget.style.display = 'none'
     }
   }
 
-  // Utility Methods
-  // ===============
+  clearInput() {
+    this.messageInputTarget.value = ''
+    this.adjustTextareaHeight()
+  }
 
-  formatModelName(model) {
-    return model
-      .replace('gpt-', 'GPT-')
-      .replace('claude-', 'Claude ')
-      .replace('-', ' ')
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
+  setInputState(enabled) {
+    this.sendButtonTarget.disabled = !enabled
+    this.messageInputTarget.disabled = !enabled
   }
 
   scrollToBottom() {
-    this.messagesContainerTarget.scrollTop = this.messagesContainerTarget.scrollHeight
+    requestAnimationFrame(() => {
+      this.messagesContainerTarget.scrollTop = this.messagesContainerTarget.scrollHeight
+    })
   }
 
   adjustTextareaHeight() {
     const textarea = this.messageInputTarget
     textarea.style.height = 'auto'
-    textarea.style.height = textarea.scrollHeight + 'px'
+    const newHeight = Math.min(textarea.scrollHeight, 200)
+    textarea.style.height = `${newHeight}px`
   }
 
+  // ==================
   // Suggestions
-  // ===========
+  // ==================
 
   sendSuggestion(event) {
     const suggestion = event.currentTarget.dataset.suggestion
@@ -358,77 +505,99 @@ export default class extends Controller {
     this.adjustTextareaHeight()
     this.messageInputTarget.focus()
 
-    // Add visual feedback
-    event.currentTarget.style.transform = 'scale(0.98)'
+    this.animateButton(event.currentTarget)
+  }
+
+  animateButton(button) {
+    button.style.transform = 'scale(0.98)'
     setTimeout(() => {
-      event.currentTarget.style.transform = ''
+      button.style.transform = ''
     }, 200)
   }
 
+  // ==================
   // Toast Notifications
-  // ===================
+  // ==================
 
   showToast(message, type = 'default') {
-    this.toastTarget.className = 'toast'
-    this.toastTarget.classList.add(type)
+    clearTimeout(this.toastTimeout)
+
+    this.toastTarget.className = `toast ${type}`
     this.toastMessageTarget.textContent = message
     this.toastTarget.setAttribute('aria-hidden', 'false')
 
-    clearTimeout(this.toastTimeout)
     this.toastTimeout = setTimeout(() => {
-      this.toastTarget.setAttribute('aria-hidden', 'true')
+      this.hideToast()
     }, 3000)
   }
 
+  hideToast() {
+    this.toastTarget.setAttribute('aria-hidden', 'true')
+  }
+
+  // ==================
   // Keyboard Handling
-  // =================
+  // ==================
 
   handleKeydown(event) {
-    // Submit on Enter (without Shift)
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
-      const form = event.target.closest('form')
-      form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
+      this.sendMessage()
     }
   }
 
   setupKeyboardShortcuts() {
-    document.addEventListener('keydown', (event) => {
+    this.keyboardHandler = (event) => {
       // Ctrl/Cmd + , to open settings
       if ((event.ctrlKey || event.metaKey) && event.key === ',') {
         event.preventDefault()
-        this.toggleSettings(event)
+        this.toggleSettings()
       }
 
       // ESC to close settings
-      if (event.key === 'Escape' && this.settingsPanelTarget.getAttribute('aria-hidden') === 'false') {
-        this.closeSettings(event)
+      if (event.key === 'Escape' &&
+        this.settingsPanelTarget.getAttribute('aria-hidden') === 'false') {
+        this.closeSettings()
       }
-    })
+    }
+
+    document.addEventListener('keydown', this.keyboardHandler)
   }
 
-  // Click Outside Handler
-  // ====================
+  // ==================
+  // Click Outside
+  // ==================
 
   setupClickOutsideHandler() {
-    document.addEventListener('click', (event) => {
-      if (!this.settingsPanelTarget.contains(event.target) &&
-        !event.target.closest('[data-action*="toggleSettings"]') &&
-        this.settingsPanelTarget.getAttribute('aria-hidden') === 'false') {
-        this.settingsPanelTarget.setAttribute('aria-hidden', 'true')
+    this.clickOutsideHandler = (event) => {
+      const isSettingsOpen = this.settingsPanelTarget.getAttribute('aria-hidden') === 'false'
+      const clickedOutside = !this.settingsPanelTarget.contains(event.target) &&
+        !event.target.closest('[data-action*="toggleSettings"]')
+
+      if (isSettingsOpen && clickedOutside) {
+        this.closeSettings()
       }
-    })
+    }
+
+    document.addEventListener('click', this.clickOutsideHandler)
   }
 
+  // ==================
   // Speech Recognition
   // ==================
 
   initializeSpeechRecognition() {
-    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-      return
-    }
+    if (!this.isSpeechRecognitionSupported()) return
 
-    // Create speech button
+    this.createSpeechButton()
+    this.setupSpeechRecognition()
+  }
+
+  isSpeechRecognitionSupported() {
+    return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window
+  }
+
+  createSpeechButton() {
     const speechButton = document.createElement('button')
     speechButton.type = 'button'
     speechButton.className = 'btn btn-icon speech-button'
@@ -439,74 +608,95 @@ export default class extends Controller {
       </svg>
     `
 
-    // Insert before send button
     const inputGroup = this.sendButtonTarget.parentElement
     inputGroup.insertBefore(speechButton, this.sendButtonTarget)
 
-    // Setup speech recognition
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-    this.recognition = new SpeechRecognition()
-    this.recognition.lang = 'pt-BR'
-    this.recognition.interimResults = false
-    this.isListening = false
-
-    // Handle click
     speechButton.addEventListener('click', () => {
       this.toggleSpeechRecognition(speechButton)
     })
 
-    // Handle results
+    this.speechButton = speechButton
+  }
+
+  setupSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    this.recognition = new SpeechRecognition()
+    this.recognition.lang = 'pt-BR'
+    this.recognition.interimResults = false
+    this.recognition.maxAlternatives = 1
+
+    this.isListening = false
+
     this.recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript
       this.messageInputTarget.value = transcript
       this.adjustTextareaHeight()
 
-      // Auto submit after speech
       setTimeout(() => {
-        this.sendMessage(new Event('submit'))
+        this.sendMessage()
       }, 500)
     }
 
-    // Handle end
     this.recognition.onend = () => {
-      this.isListening = false
-      speechButton.classList.remove('listening')
+      this.stopListening()
     }
 
-    // Handle errors
     this.recognition.onerror = (event) => {
       console.error('Speech recognition error:', event.error)
       this.showToast('Erro ao reconhecer voz. Tente novamente.', 'error')
-      this.isListening = false
-      speechButton.classList.remove('listening')
+      this.stopListening()
     }
   }
 
   toggleSpeechRecognition(button) {
     if (this.isListening) {
       this.recognition.stop()
-      this.isListening = false
-      button.classList.remove('listening')
     } else {
+      this.startListening(button)
+    }
+  }
+
+  startListening(button) {
+    try {
       this.recognition.start()
       this.isListening = true
       button.classList.add('listening')
       this.showToast('Escutando... Fale sua pergunta', 'default')
+    } catch (error) {
+      console.error('Failed to start speech recognition:', error)
+      this.showToast('Erro ao iniciar reconhecimento de voz', 'error')
     }
   }
 
-  // Lifecycle callbacks
-  // ===================
+  stopListening() {
+    this.isListening = false
+    if (this.speechButton) {
+      this.speechButton.classList.remove('listening')
+    }
+  }
 
-  disconnect() {
-    // Clean up timeouts
+  // ==================
+  // Cleanup
+  // ==================
+
+  cleanup() {
+    // Clear timeouts
     if (this.toastTimeout) {
       clearTimeout(this.toastTimeout)
     }
 
-    // Stop speech recognition if active
+    // Stop speech recognition
     if (this.recognition && this.isListening) {
       this.recognition.stop()
+    }
+
+    // Remove event listeners
+    if (this.keyboardHandler) {
+      document.removeEventListener('keydown', this.keyboardHandler)
+    }
+
+    if (this.clickOutsideHandler) {
+      document.removeEventListener('click', this.clickOutsideHandler)
     }
   }
 }
