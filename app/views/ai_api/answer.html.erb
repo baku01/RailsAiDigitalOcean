@@ -1,315 +1,345 @@
-<% content_for :title, "AI Assistant Chat" %>
-
-<% content_for :head do %>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Assistant Chat</title>
 
   <!-- External CSS -->
+  <%= javascript_importmap_tags %>
   <%= stylesheet_link_tag "chat", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-<% end %>
 
-<%
-# Get models
-models = AiApiService.new.list_models
-available_models = ApiFormatter.extract_model_names(response: models)
-%>
+  <!-- Inline critical CSS for faster initial render -->
+  <style>
+    /* Critical CSS for above-the-fold content */
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f7f7f8;
+    }
 
-<!-- Loading indicator -->
-<div class="app-loading" id="app-loading">
-  <div class="spinner"></div>
-</div>
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #ffffff;
+    }
 
-<!-- Main chat container with Stimulus -->
-<div class="chat-container" data-controller="chat">
-  <!-- Header Component -->
-  <header class="chat-header">
-    <h1 class="chat-title">
-      <svg class="icon icon-chat" aria-hidden="true">
-        <use href="#icon-chat"></use>
-      </svg>
-      <span>AI Assistant</span>
-    </h1>
+    .chat-header {
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #e5e5e5;
+    }
 
-    <button
-      data-action="click->chat#toggleSettings"
-      class="btn btn-icon settings-button"
-      aria-label="Abrir configurações"
-      type="button"
-    >
-      <svg class="icon icon-settings" aria-hidden="true">
-        <use href="#icon-settings"></use>
-      </svg>
-      <span class="btn-text">Configurações</span>
-    </button>
-  </header>
+    /* Loading state */
+    .app-loading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading indicator -->
+  <div class="app-loading" id="app-loading">
+    <div class="spinner"></div>
+  </div>
 
-  <!-- Settings Panel Component -->
-  <aside
-    data-chat-target="settingsPanel"
-    class="settings-panel"
-    aria-label="Painel de configurações"
-    aria-hidden="true"
-  >
-    <div class="settings-header">
-      <h2>Configurações</h2>
+  <!-- Main chat container with Stimulus -->
+  <div class="chat-container" id="chat-app" data-controller="chat">
+    <!-- Header Component -->
+    <header class="chat-header">
+      <h1 class="chat-title">
+        <svg class="icon icon-chat" aria-hidden="true">
+          <use href="#icon-chat"></use>
+        </svg>
+        <span>AI Assistant</span>
+      </h1>
+
       <button
-        data-action="click->chat#closeSettings"
-        class="btn btn-icon"
-        aria-label="Fechar configurações"
+        data-action="click->chat#toggleSettings"
+        class="btn btn-icon settings-button"
+        aria-label="Abrir configurações"
         type="button"
       >
-        <svg class="icon icon-close" aria-hidden="true">
-          <use href="#icon-close"></use>
+        <svg class="icon icon-settings" aria-hidden="true">
+          <use href="#icon-settings"></use>
         </svg>
+        <span class="btn-text">Configurações</span>
       </button>
-    </div>
+    </header>
 
-    <form data-action="submit->chat#saveSettings" class="settings-form">
-      <!-- Model Selection -->
-      <div class="form-group">
-        <label for="model-select">Modelo</label>
-        <select
-          data-chat-target="modelSelect"
-          id="model-select"
-          name="model"
-          class="form-control"
-          required
-        >
-          <% available_models.each do |model| %>
-            <option value="<%= model['id'] %>"><%= model['name'] %></option>
-          <% end %>
-        </select>
-      </div>
-
-      <!-- Temperature -->
-      <div class="form-group">
-        <label for="temperature-input">
-          Temperatura
-          <span class="label-hint">(0-2)</span>
-        </label>
-        <input
-          data-chat-target="temperatureInput"
-          data-action="input->chat#validateTemperature"
-          type="number"
-          id="temperature-input"
-          name="temperature"
-          class="form-control"
-          value="0.7"
-          min="0"
-          max="2"
-          step="0.1"
-          required
-        >
-        <div class="error-message" role="alert" data-chat-target="temperatureError">
-          Temperatura deve estar entre 0 e 2
-        </div>
-      </div>
-
-      <!-- Max Tokens -->
-      <div class="form-group">
-        <label for="max-tokens-input">
-          Máximo de Tokens
-          <span class="label-hint">(1-4000)</span>
-        </label>
-        <input
-          data-chat-target="maxTokensInput"
-          data-action="input->chat#validateMaxTokens"
-          type="number"
-          id="max-tokens-input"
-          name="max_tokens"
-          class="form-control"
-          value="1000"
-          min="1"
-          max="4000"
-          required
-        >
-        <div class="error-message" role="alert" data-chat-target="maxTokensError">
-          Valor deve estar entre 1 e 4000
-        </div>
-      </div>
-
-      <!-- Theme Toggle -->
-      <div class="form-group">
-        <label class="switch-label" for="theme-switch">
-          <span>Tema Escuro</span>
-          <input
-            data-chat-target="themeSwitch"
-            data-action="change->chat#toggleTheme"
-            type="checkbox"
-            id="theme-switch"
-            class="switch-input"
-            role="switch"
-            aria-checked="false"
-          >
-          <span class="switch-slider"></span>
-        </label>
-      </div>
-
-      <button type="submit" class="btn btn-primary save-settings">
-        <svg class="icon icon-save" aria-hidden="true">
-          <use href="#icon-save"></use>
-        </svg>
-        <span>Salvar Configurações</span>
-      </button>
-    </form>
-  </aside>
-
-  <!-- Messages Container -->
-  <main
-    data-chat-target="messagesContainer"
-    class="messages-container"
-    role="log"
-    aria-live="polite"
-  >
-    <!-- Empty State -->
-    <div data-chat-target="emptyState" class="empty-state">
-      <h2>Como posso ajudar você hoje?</h2>
-      <p>Faça uma pergunta ou escolha uma das sugestões abaixo para começar.</p>
-
-      <div class="suggestions-grid">
+    <!-- Settings Panel Component -->
+    <aside
+      data-chat-target="settingsPanel"
+      class="settings-panel"
+      aria-label="Painel de configurações"
+      aria-hidden="true"
+    >
+      <div class="settings-header">
+        <h2>Configurações</h2>
         <button
-          data-action="click->chat#sendSuggestion"
-          data-suggestion="Explique como funciona machine learning"
-          class="suggestion-card"
+          data-action="click->chat#closeSettings"
+          class="btn btn-icon"
+          aria-label="Fechar configurações"
           type="button"
         >
-          <span class="suggestion-icon">🤖</span>
-          <h3>Machine Learning</h3>
-          <p>Explique como funciona machine learning de forma simples</p>
-        </button>
-
-        <button
-          data-action="click->chat#sendSuggestion"
-          data-suggestion="Escreva um código Python para ordenar uma lista"
-          class="suggestion-card"
-          type="button"
-        >
-          <span class="suggestion-icon">💻</span>
-          <h3>Código Python</h3>
-          <p>Escreva um código Python para ordenar uma lista</p>
-        </button>
-
-        <button
-          data-action="click->chat#sendSuggestion"
-          data-suggestion="Quais são as melhores práticas para APIs REST?"
-          class="suggestion-card"
-          type="button"
-        >
-          <span class="suggestion-icon">🌐</span>
-          <h3>APIs REST</h3>
-          <p>Quais são as melhores práticas para APIs REST?</p>
-        </button>
-
-        <button
-          data-action="click->chat#sendSuggestion"
-          data-suggestion="Como otimizar consultas SQL?"
-          class="suggestion-card"
-          type="button"
-        >
-          <span class="suggestion-icon">🗄️</span>
-          <h3>SQL</h3>
-          <p>Como otimizar consultas SQL para melhor performance?</p>
+          <svg class="icon icon-close" aria-hidden="true">
+            <use href="#icon-close"></use>
+          </svg>
         </button>
       </div>
-    </div>
 
-    <!-- Messages will be dynamically inserted here -->
-  </main>
-
-  <!-- Input Container -->
-  <footer class="input-container">
-    <div class="input-wrapper">
-      <form
-        data-action="submit->chat#sendMessage"
-        class="chat-form"
-        action="/ai_api/answer"
-        method="post"
-      >
-        <%= csrf_meta_tags %>
-
-        <div class="input-group">
-          <textarea
-            data-chat-target="messageInput"
-            data-action="input->chat#adjustTextareaHeight keydown->chat#handleKeydown"
-            class="chat-input"
-            name="question"
-            placeholder="Digite sua mensagem..."
-            rows="1"
+      <form data-action="submit->chat#saveSettings" class="settings-form">
+        <!-- Model Selection -->
+        <div class="form-group">
+          <label for="model-select">Modelo</label>
+          <select
+            data-chat-target="modelSelect"
+            id="model-select"
+            name="model"
+            class="form-control"
             required
-            aria-label="Digite sua mensagem"
-          ></textarea>
+          >
+            <% @models.each do |model| %>
+              <option value="<%= model %>"><%= model %></option>
+            <% end %>
+          </select>
+        </div>
 
-          <!-- Speech button will be inserted here if supported -->
+
+        <!-- Temperature -->
+        <div class="form-group">
+          <label for="temperature-input">
+            Temperatura
+            <span class="label-hint">(0-2)</span>
+          </label>
+          <input
+            data-chat-target="temperatureInput"
+            data-action="input->chat#validateTemperature"
+            type="number"
+            id="temperature-input"
+            name="temperature"
+            class="form-control"
+            value="0.7"
+            min="0"
+            max="2"
+            step="0.1"
+            required
+          >
+          <div class="error-message" role="alert" data-chat-target="temperatureError">
+            Temperatura deve estar entre 0 e 2
+          </div>
+        </div>
+
+        <!-- Max Tokens -->
+        <div class="form-group">
+          <label for="max-tokens-input">
+            Máximo de Tokens
+            <span class="label-hint">(1-4000)</span>
+          </label>
+          <input
+            data-chat-target="maxTokensInput"
+            data-action="input->chat#validateMaxTokens"
+            type="number"
+            id="max-tokens-input"
+            name="max_tokens"
+            class="form-control"
+            value="1000"
+            min="1"
+            max="4000"
+            required
+          >
+          <div class="error-message" role="alert" data-chat-target="maxTokensError">
+            Valor deve estar entre 1 e 4000
+          </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <div class="form-group">
+          <label class="switch-label" for="theme-switch">
+            <span>Tema Escuro</span>
+            <input
+              data-chat-target="themeSwitch"
+              data-action="change->chat#toggleTheme"
+              type="checkbox"
+              id="theme-switch"
+              class="switch-input"
+              role="switch"
+              aria-checked="false"
+            >
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary save-settings">
+          <svg class="icon icon-save" aria-hidden="true">
+            <use href="#icon-save"></use>
+          </svg>
+          <span>Salvar Configurações</span>
+        </button>
+      </form>
+    </aside>
+
+    <!-- Messages Container -->
+    <main
+      data-chat-target="messagesContainer"
+      class="messages-container"
+      role="log"
+      aria-live="polite"
+    >
+      <!-- Empty State -->
+      <div data-chat-target="emptyState" class="empty-state">
+        <h2>Como posso ajudar você hoje?</h2>
+        <p>Faça uma pergunta ou escolha uma das sugestões abaixo para começar.</p>
+
+        <div class="suggestions-grid">
+          <button
+            data-action="click->chat#sendSuggestion"
+            data-suggestion="Explique como funciona machine learning"
+            class="suggestion-card"
+            type="button"
+          >
+            <span class="suggestion-icon">🤖</span>
+            <h3>Machine Learning</h3>
+            <p>Explique como funciona machine learning de forma simples</p>
+          </button>
 
           <button
-            data-chat-target="sendButton"
-            type="submit"
-            class="btn btn-primary send-button"
-            aria-label="Enviar mensagem"
+            data-action="click->chat#sendSuggestion"
+            data-suggestion="Escreva um código Python para ordenar uma lista"
+            class="suggestion-card"
+            type="button"
           >
-            <span>Enviar</span>
-            <svg class="icon icon-send" aria-hidden="true">
-              <use href="#icon-send"></use>
-            </svg>
+            <span class="suggestion-icon">💻</span>
+            <h3>Código Python</h3>
+            <p>Escreva um código Python para ordenar uma lista</p>
+          </button>
+
+          <button
+            data-action="click->chat#sendSuggestion"
+            data-suggestion="Quais são as melhores práticas para APIs REST?"
+            class="suggestion-card"
+            type="button"
+          >
+            <span class="suggestion-icon">🌐</span>
+            <h3>APIs REST</h3>
+            <p>Quais são as melhores práticas para APIs REST?</p>
+          </button>
+
+          <button
+            data-action="click->chat#sendSuggestion"
+            data-suggestion="Como otimizar consultas SQL?"
+            class="suggestion-card"
+            type="button"
+          >
+            <span class="suggestion-icon">🗄️</span>
+            <h3>SQL</h3>
+            <p>Como otimizar consultas SQL para melhor performance?</p>
           </button>
         </div>
-      </form>
-    </div>
-  </footer>
-</div>
+      </div>
 
-<!-- Toast Notification -->
-<div
-  data-chat-target="toast"
-  class="toast"
-  role="alert"
-  aria-live="polite"
-  aria-hidden="true"
->
-  <svg class="icon toast-icon" aria-hidden="true">
-    <use href="#icon-check"></use>
+      <!-- Messages will be dynamically inserted here -->
+    </main>
+
+    <!-- Input Container -->
+    <footer class="input-container">
+      <div class="input-wrapper">
+        <form
+          data-action="submit->chat#sendMessage"
+          class="chat-form"
+          action="/ai_api/answer"
+          method="post"
+        >
+          <%= csrf_meta_tags %>
+
+          <div class="input-group">
+            <textarea
+              data-chat-target="messageInput"
+              data-action="input->chat#adjustTextareaHeight keydown->chat#handleKeydown"
+              class="chat-input"
+              name="question"
+              placeholder="Digite sua mensagem..."
+              rows="1"
+              required
+              aria-label="Digite sua mensagem"
+            ></textarea>
+
+            <!-- Speech button will be inserted here if supported -->
+
+            <button
+              data-chat-target="sendButton"
+              type="submit"
+              class="btn btn-primary send-button"
+              aria-label="Enviar mensagem"
+            >
+              <span>Enviar</span>
+              <svg class="icon icon-send" aria-hidden="true">
+                <use href="#icon-send"></use>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Notification -->
+  <div
+    data-chat-target="toast"
+    class="toast"
+    role="alert"
+    aria-live="polite"
+    aria-hidden="true"
+  >
+    <svg class="icon toast-icon" aria-hidden="true">
+      <use href="#icon-check"></use>
+    </svg>
+    <span data-chat-target="toastMessage"></span>
+  </div>
+
+  <!-- SVG Icons Sprite -->
+  <svg style="display: none;">
+    <defs>
+      <symbol id="icon-chat" viewBox="0 0 24 24">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+
+      <symbol id="icon-settings" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+
+      <symbol id="icon-close" viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+
+      <symbol id="icon-save" viewBox="0 0 24 24">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="17 21 17 13 7 13 7 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="7 3 7 8 15 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+
+      <symbol id="icon-send" viewBox="0 0 24 24">
+        <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 8L11 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="22 4 12 14.01 9 11.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+
+      <symbol id="icon-microphone" viewBox="0 0 24 24">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="8" y1="23" x2="16" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </symbol>
+    </defs>
   </svg>
-  <span data-chat-target="toastMessage"></span>
-</div>
 
-<!-- SVG Icons Sprite -->
-<svg style="display: none;">
-  <defs>
-    <symbol id="icon-chat" viewBox="0 0 24 24">
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-
-    <symbol id="icon-settings" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-
-    <symbol id="icon-close" viewBox="0 0 24 24">
-      <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-
-    <symbol id="icon-save" viewBox="0 0 24 24">
-      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <polyline points="17 21 17 13 7 13 7 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <polyline points="7 3 7 8 15 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-
-    <symbol id="icon-send" viewBox="0 0 24 24">
-      <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 8L11 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-
-    <symbol id="icon-check" viewBox="0 0 24 24">
-      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <polyline points="22 4 12 14.01 9 11.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-
-    <symbol id="icon-microphone" viewBox="0 0 24 24">
-      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <line x1="8" y1="23" x2="16" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </symbol>
-  </defs>
-</svg>
+</body>
+</html>
