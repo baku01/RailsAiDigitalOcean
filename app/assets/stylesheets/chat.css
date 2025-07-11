@@ -2190,3 +2190,222 @@ body.dark-theme .theme-toggle .icon-moon {
 .suggestion-card {
     color: #222 !important;
 }
+
+/* ===================================
+   CORREÇÕES CRÍTICAS PARA CORES MOBILE
+   Adicionar APÓS o CSS existente
+   =================================== */
+
+/* 1. Remover uso problemático de -webkit-text-fill-color em gradientes */
+.title-text {
+    /* Fallback para navegadores que não suportam clip de texto */
+    color: var(--primary-600);
+
+    /* Gradiente apenas se suportado */
+    @supports (background-clip: text) or (-webkit-background-clip: text) {
+        background: linear-gradient(
+            135deg,
+            var(--primary-600),
+            var(--secondary-600)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        /* Removido: -webkit-text-fill-color: transparent; */
+    }
+}
+
+/* 2. Correção do input mobile SEM all: unset */
+@media (max-width: 768px) {
+    .input-field .chat-input {
+        /* Remover all: unset e aplicar estilos específicos */
+        display: block;
+        width: 100%;
+        min-height: 48px;
+        max-height: 120px;
+        margin: 0;
+        padding: var(--space-3) var(--space-4);
+        padding-right: var(--space-12);
+
+        /* Tipografia */
+        font-family: var(--font-family-base);
+        font-size: 16px; /* Previne zoom no iOS */
+        line-height: 1.5;
+        font-weight: normal;
+        text-align: left;
+        text-decoration: none;
+        text-transform: none;
+
+        /* Cores com fallback */
+        color: #111827; /* Fallback direto */
+        color: var(--text-primary);
+        background-color: #ffffff; /* Fallback direto */
+        background-color: var(--surface);
+
+        /* Bordas e layout */
+        border: 2px solid #e5e7eb; /* Fallback direto */
+        border: 2px solid var(--border);
+        border-radius: var(--radius-lg);
+
+        /* Comportamento */
+        resize: none;
+        overflow-y: auto;
+        outline: none;
+        -webkit-appearance: none;
+        appearance: none;
+        box-sizing: border-box;
+
+        /* Transições */
+        transition: border-color 0.2s ease;
+
+        /* Garantir visibilidade do cursor */
+        caret-color: currentColor;
+    }
+
+    /* Tema escuro com fallbacks */
+    body.dark-theme .input-field .chat-input {
+        color: #f9fafb;
+        color: var(--text-primary);
+        background-color: #1f2937;
+        background-color: var(--surface);
+        border-color: #374151;
+        border-color: var(--border);
+    }
+}
+
+/* 3. Forçar cores em TODOS os elementos de texto mobile */
+@media (max-width: 768px) {
+    /* Reset global de -webkit-text-fill-color */
+    * {
+        -webkit-text-fill-color: initial !important;
+    }
+
+    /* Cores específicas para elementos de texto */
+    p,
+    span,
+    div,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .message-text,
+    .message-role,
+    .chat-title,
+    .empty-state h2,
+    .empty-state p,
+    .btn,
+    .btn-primary,
+    .btn-secondary {
+        color: inherit;
+        -webkit-text-fill-color: initial;
+    }
+
+    /* Tema claro - cores explícitas */
+    body:not(.dark-theme) {
+        color: #111827;
+    }
+
+    body:not(.dark-theme) .message-text,
+    body:not(.dark-theme) .message-role,
+    body:not(.dark-theme) p,
+    body:not(.dark-theme) span {
+        color: #111827;
+    }
+
+    /* Tema escuro - cores explícitas */
+    body.dark-theme {
+        color: #f9fafb;
+    }
+
+    body.dark-theme .message-text,
+    body.dark-theme .message-role,
+    body.dark-theme p,
+    body.dark-theme span {
+        color: #f9fafb;
+    }
+}
+
+/* 4. Placeholder com cores corretas */
+@media (max-width: 768px) {
+    .chat-input::placeholder {
+        color: #9ca3af !important;
+        opacity: 1 !important;
+        -webkit-text-fill-color: #9ca3af !important;
+    }
+
+    body.dark-theme .chat-input::placeholder {
+        color: #6b7280 !important;
+        -webkit-text-fill-color: #6b7280 !important;
+    }
+}
+
+/* 5. Correção específica para botões */
+@media (max-width: 768px) {
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-icon,
+    .suggestion-card {
+        /* Tema claro */
+        color: #111827 !important;
+        -webkit-text-fill-color: initial !important;
+    }
+
+    body.dark-theme .btn,
+    body.dark-theme .btn-secondary,
+    body.dark-theme .btn-icon,
+    body.dark-theme .suggestion-card {
+        color: #f9fafb !important;
+    }
+
+    /* Botão primário sempre branco */
+    .btn-primary,
+    body.dark-theme .btn-primary {
+        color: #ffffff !important;
+    }
+}
+
+/* 6. Debug - Ativar apenas se necessário */
+/*
+@media (max-width: 768px) {
+    * {
+        border: 1px solid red !important;
+        background: rgba(255, 0, 0, 0.1) !important;
+    }
+
+    .chat-input {
+        border: 3px solid blue !important;
+        background: yellow !important;
+        color: black !important;
+        font-size: 20px !important;
+    }
+}
+*/
+
+/* 7. Garantir alta especificidade para correções críticas */
+@media (max-width: 768px) {
+    html body .chat-container .input-wrapper .input-field .chat-input {
+        color: var(--text-primary) !important;
+        -webkit-text-fill-color: unset !important;
+    }
+
+    html
+        body:not(.dark-theme)
+        .chat-container
+        .input-wrapper
+        .input-field
+        .chat-input {
+        color: #111827 !important;
+    }
+
+    html
+        body.dark-theme
+        .chat-container
+        .input-wrapper
+        .input-field
+        .chat-input {
+        color: #f9fafb !important;
+    }
+}
