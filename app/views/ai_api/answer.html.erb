@@ -5,9 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Assistant Chat</title>
 
+  <%
+  # Get models
+  models = AiApiService.new.list_models
+  @available_models = ApiFormatter.extract_model_names(response: models)
+  %>
+
   <!-- External CSS -->
   <%= javascript_importmap_tags %>
   <%= stylesheet_link_tag "chat", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "markdown", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
   <!-- Inline critical CSS for faster initial render -->
@@ -102,8 +109,8 @@
             class="form-control"
             required
           >
-            <% @models.each do |model| %>
-              <option value="<%= model %>"><%= model %></option>
+            <% @available_models.each do |model| %>
+              <option value="<%= model['id'] %>"><%= model['name'] %></option>
             <% end %>
           </select>
         </div>
