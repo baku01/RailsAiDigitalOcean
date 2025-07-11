@@ -2069,3 +2069,117 @@ body.dark-theme .theme-toggle .icon-moon {
         }
     }
 }
+/* ===================================
+   Correção de Cores do Texto Mobile
+   Adicionar APÓS o CSS mobile existente
+   =================================== */
+
+/* Correções específicas para o problema de texto branco */
+@media (max-width: 768px) {
+    /* Forçar cores corretas no input */
+    .chat-input {
+        /* Resetar qualquer estilo que possa causar problemas */
+        color: var(--text-primary) !important;
+        -webkit-text-fill-color: var(--text-primary) !important;
+        background-color: var(--surface) !important;
+        caret-color: var(--text-primary) !important;
+    }
+
+    /* Tema claro - cores específicas */
+    body:not(.dark-theme) .chat-input {
+        color: #111827 !important;
+        -webkit-text-fill-color: #111827 !important;
+        background-color: #ffffff !important;
+        caret-color: #111827 !important;
+    }
+
+    body:not(.dark-theme) .chat-input::placeholder {
+        color: #6b7280 !important;
+        -webkit-text-fill-color: #6b7280 !important;
+        opacity: 1 !important;
+    }
+
+    /* Tema escuro - cores específicas */
+    body.dark-theme .chat-input {
+        color: #f9fafb !important;
+        -webkit-text-fill-color: #f9fafb !important;
+        background-color: #1f2937 !important;
+        caret-color: #f9fafb !important;
+    }
+
+    body.dark-theme .chat-input::placeholder {
+        color: #9ca3af !important;
+        -webkit-text-fill-color: #9ca3af !important;
+        opacity: 1 !important;
+    }
+
+    /* Estados do input */
+    .chat-input:focus,
+    .chat-input:active,
+    .chat-input:not(:placeholder-shown) {
+        color: inherit !important;
+        -webkit-text-fill-color: inherit !important;
+    }
+
+    /* Remover estilos que possam interferir */
+    .chat-input {
+        text-shadow: none !important;
+        filter: none !important;
+        mix-blend-mode: normal !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+    }
+
+    /* Garantir que o input field não tenha estilos conflitantes */
+    .input-field .chat-input {
+        all: unset;
+        /* Reaplicar apenas os estilos necessários */
+        width: 100%;
+        min-height: 48px;
+        max-height: 120px;
+        padding: var(--space-3) var(--space-4);
+        padding-right: var(--space-12);
+        font-size: 16px;
+        font-family: inherit;
+        line-height: 1.5;
+        border-radius: var(--radius-lg);
+        border: 2px solid var(--border);
+        resize: none;
+        overflow-y: auto;
+        transition: border-color 0.2s ease;
+        box-sizing: border-box;
+        /* Cores forçadas */
+        color: var(--text-primary) !important;
+        background-color: var(--surface) !important;
+    }
+}
+
+/* Correção adicional para iOS/Safari */
+@media (max-width: 768px) {
+    @supports (-webkit-touch-callout: none) {
+        .chat-input {
+            -webkit-appearance: none !important;
+            -webkit-text-fill-color: currentColor !important;
+        }
+
+        body:not(.dark-theme) .chat-input {
+            color: #111827 !important;
+            -webkit-text-fill-color: #111827 !important;
+        }
+
+        body.dark-theme .chat-input {
+            color: #f9fafb !important;
+            -webkit-text-fill-color: #f9fafb !important;
+        }
+    }
+}
+
+/* Debug - remover após confirmar que funciona */
+@media (max-width: 768px) {
+    .chat-input {
+        /* Se ainda estiver com problemas, descomente para debug */
+        /* border: 3px solid red !important; */
+        /* background: yellow !important; */
+        /* color: black !important; */
+    }
+}
