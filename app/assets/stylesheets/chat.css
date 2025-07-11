@@ -1778,153 +1778,69 @@ body.dark-theme .theme-toggle .icon-moon {
     }
 }
 
-@media (max-width: 480px) {
-    .input-actions {
-        flex-direction: column;
-        gap: var(--space-2);
-        width: 100%;
-    }
-
-    .send-button {
-        width: 100%;
-        min-width: auto;
-    }
-
-    .input-counter {
-        position: relative;
-        bottom: auto;
-        right: auto;
-        margin-top: var(--space-2);
-        align-self: flex-end;
-    }
-
-    .toggle-group {
-        flex-direction: column;
-        gap: var(--space-3);
-    }
-
-    .suggestion-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-2);
-    }
-
-    .suggestion-tags {
-        flex-wrap: wrap;
-    }
-}
-
-/* ===================================
-   Accessibility Improvements
-   =================================== */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* Focus Visible */
-.btn:focus-visible,
-.form-control:focus-visible,
-.form-slider:focus-visible,
-.chat-input:focus-visible {
-    outline: 2px solid var(--primary-500);
-    outline-offset: 2px;
-}
-
-/* High Contrast Support */
-@media (prefers-contrast: high) {
-    :root {
-        --border: #000000;
-        --text-secondary: #000000;
-        --text-tertiary: #333333;
-    }
-
-    body.dark-theme {
-        --border: #ffffff;
-        --text-secondary: #ffffff;
-        --text-tertiary: #cccccc;
-    }
-}
-
-/* ===================================
-   Print Styles
-   =================================== */
-@media print {
-    .chat-header,
-    .input-container,
-    .settings-panel,
-    .toast-container {
-        display: none;
-    }
-
-    .messages-container {
-        padding: 0;
-        background: white;
-        color: black;
-    }
-
-    .message {
-        page-break-inside: avoid;
-    }
-}
-@media (max-width: 768px) {
-    .chat-header,
-    .header-content,
-    .input-container,
-    .form-actions,
-    .input-actions,
-    .toggle-group,
+@media (max-width: 600px) {
+    /* Cards de ação (ajuste para grid de 1 coluna) */
     .suggestions-grid,
-    .capabilities-grid {
+    .capabilities-grid,
+    .quick-actions {
+        display: flex !important;
         flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 1.25rem !important; /* 20px */
-    }
-
-    .messages-container,
-    .empty-state,
-    .settings-panel {
-        padding: 1.5rem 1rem !important;
-    }
-
-    .chat-title,
-    .empty-state h2,
-    .empty-state p {
-        text-align: left !important;
+        gap: 1rem !important;
         width: 100% !important;
     }
-
-    .chat-input,
-    .send-button,
-    .speech-button,
-    .attachment-button,
-    .btn,
-    .btn-primary,
-    .btn-secondary {
+    .suggestion-card,
+    .capability-item,
+    .quick-actions > * {
         width: 100% !important;
         min-width: 0 !important;
         margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Espaçamento vertical entre blocos principais */
+    .empty-state,
+    .messages-container,
+    .input-container,
+    .chat-header,
+    .header-content {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* Input e botões em coluna */
+    .input-container,
+    .input-group,
+    .input-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+    }
+
+    /* Input ocupa toda a largura */
+    .chat-input,
+    .input-field {
+        width: 100% !important;
+        min-width: 0 !important;
         font-size: 1rem !important;
         padding: 1rem !important;
         box-sizing: border-box !important;
     }
 
-    .suggestions-grid,
-    .capabilities-grid {
-        grid-template-columns: 1fr !important;
-        gap: 1rem !important;
+    /* Botões grandes e alinhados */
+    .send-button,
+    .speech-button,
+    .attachment-button {
+        width: 100% !important;
+        min-width: 0 !important;
+        font-size: 1rem !important;
+        padding: 1rem !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
     }
 
-    .message-content {
-        max-width: 100% !important;
-        word-break: break-word !important;
-    }
-
+    /* Ajuste do contador de caracteres */
     .input-counter {
         margin-top: 0.5rem !important;
         align-self: flex-end !important;
