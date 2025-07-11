@@ -1778,7 +1778,7 @@ body.dark-theme .theme-toggle .icon-moon {
     }
 }
 /* ===================================
-   Mobile Optimizations - Adicionar ao final do CSS existente
+   Mobile Optimizations - Corrigido e Unificado
    =================================== */
 
 /* Melhorias gerais para mobile */
@@ -1797,6 +1797,7 @@ body.dark-theme .theme-toggle .icon-moon {
         padding: var(--space-4) var(--space-3);
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
     }
 
     /* Header responsivo */
@@ -1846,7 +1847,7 @@ body.dark-theme .theme-toggle .icon-moon {
     .message-text {
         padding: var(--space-3) var(--space-4);
         font-size: var(--text-sm);
-        line-height: var(--leading-relaxed);
+        line-height: 1.6;
     }
 
     /* Empty state otimizado */
@@ -1882,6 +1883,7 @@ body.dark-theme .theme-toggle .icon-moon {
 
     .suggestion-card {
         padding: var(--space-4);
+        min-height: 44px;
     }
 
     .suggestion-header h4 {
@@ -1901,49 +1903,73 @@ body.dark-theme .theme-toggle .icon-moon {
     .capability-item {
         padding: var(--space-3) var(--space-4);
         font-size: var(--text-xs);
+        min-height: 44px;
     }
 
-    /* Input container sticky melhorado */
+    /* Input container e alinhamento corrigidos */
     .input-container {
         padding: var(--space-3) var(--space-4);
-        /* Compensar safe area em iOS */
         padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom));
     }
 
     .input-group {
+        display: flex;
         gap: var(--space-2);
-        align-items: stretch;
+        align-items: flex-end;
+        width: 100%;
+    }
+
+    .input-field {
+        flex: 1;
+        position: relative;
+        min-width: 0;
     }
 
     .chat-input {
-        min-height: 44px; /* Touch target mínimo */
+        width: 100%;
+        min-height: 48px;
         max-height: 120px;
         padding: var(--space-3) var(--space-4);
+        padding-right: var(--space-10);
         font-size: 16px; /* Previne zoom no iOS */
         border-radius: var(--radius-lg);
+        box-sizing: border-box;
     }
 
-    /* Botões de ação otimizados */
+    .chat-input:focus {
+        transform: none; /* Evitar bugs de layout */
+    }
+
+    /* Input actions apenas com botão enviar */
     .input-actions {
-        gap: var(--space-2);
-    }
-
-    .speech-button,
-    .attachment-button {
-        width: 44px; /* Touch target adequado */
-        height: 44px;
-        border-radius: var(--radius-md);
+        display: flex;
+        align-items: flex-end;
+        flex-shrink: 0;
     }
 
     .send-button {
-        height: 44px;
-        min-width: 80px;
+        height: 48px;
+        min-width: 48px;
         padding: 0 var(--space-4);
         border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
     }
 
     .send-button .btn-text {
         display: none; /* Apenas ícone no mobile */
+    }
+
+    .send-button .icon {
+        margin: 0;
+    }
+
+    /* Botões removidos devem estar ocultos */
+    .speech-button,
+    .attachment-button {
+        display: none !important;
     }
 
     /* Input hints ocultas no mobile */
@@ -1953,9 +1979,16 @@ body.dark-theme .theme-toggle .icon-moon {
 
     /* Input counter ajustado */
     .input-counter {
+        position: absolute;
         bottom: var(--space-1);
         right: var(--space-3);
         font-size: 0.6875rem;
+        background: var(--surface-elevated);
+        padding: var(--space-1) var(--space-2);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+        pointer-events: none;
+        z-index: 1;
     }
 
     /* Toast notifications responsivas */
@@ -1965,6 +1998,43 @@ body.dark-theme .theme-toggle .icon-moon {
         right: var(--space-4);
         max-width: none;
     }
+
+    /* Botões gerais com touch targets adequados */
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Melhor contraste em telas pequenas */
+    .text-secondary {
+        color: var(--gray-600);
+    }
+
+    .text-tertiary {
+        color: var(--gray-500);
+    }
+
+    /* Hover states apenas para dispositivos que suportam hover */
+    @media (hover: none) {
+        .btn:hover,
+        .suggestion-card:hover,
+        .btn-icon:hover,
+        .send-button:hover {
+            transform: none;
+            box-shadow: var(--shadow-sm);
+        }
+    }
+
+    /* Reduzir animações em dispositivos que preferem menos movimento */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
 }
 
 /* Ajustes específicos para telas muito pequenas */
@@ -1972,6 +2042,7 @@ body.dark-theme .theme-toggle .icon-moon {
     /* Header ainda mais compacto */
     .header-content {
         padding: var(--space-2) var(--space-3);
+        min-height: 56px;
     }
 
     .chat-title {
@@ -2041,64 +2112,23 @@ body.dark-theme .theme-toggle .icon-moon {
     }
 
     .chat-input {
-        min-height: 40px;
-        padding: var(--space-2) var(--space-3);
+        min-height: 44px;
+        padding: var(--space-3);
         font-size: 16px;
-    }
-
-    .speech-button,
-    .attachment-button {
-        width: 40px;
-        height: 40px;
+        border-radius: var(--radius-md);
     }
 
     .send-button {
-        height: 40px;
-        min-width: 40px;
-        padding: 0 var(--space-2);
+        height: 44px;
+        min-width: 44px;
+        padding: 0;
+        border-radius: var(--radius-md);
     }
 
     .send-button .icon {
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
         margin: 0;
-    }
-}
-
-/* Melhorias de performance para mobile */
-@media (max-width: 768px) {
-    /* Reduzir animações em dispositivos lentos */
-    @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-        }
-    }
-
-    /* Otimizações para scroll */
-    .messages-container {
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior: contain;
-    }
-
-    /* Melhor handling de focus em mobile */
-    .chat-input:focus {
-        /* Reduzir transform em mobile para evitar bugs de layout */
-        transform: none;
-    }
-
-    /* Hover states apenas para dispositivos que suportam hover */
-    @media (hover: none) {
-        .btn:hover,
-        .suggestion-card:hover,
-        .btn-icon:hover,
-        .send-button:hover {
-            transform: none;
-            box-shadow: var(--shadow-sm);
-        }
     }
 }
 
@@ -2145,30 +2175,5 @@ body.dark-theme .theme-toggle .icon-moon {
 
     .toast-container {
         bottom: max(var(--space-4), env(safe-area-inset-bottom));
-    }
-}
-
-/* Melhorias para acessibilidade em mobile */
-@media (max-width: 768px) {
-    /* Aumentar touch targets */
-    .btn,
-    .suggestion-card,
-    .capability-item {
-        min-height: 44px;
-        min-width: 44px;
-    }
-
-    /* Melhor contraste em telas pequenas */
-    .text-secondary {
-        color: var(--gray-600);
-    }
-
-    .text-tertiary {
-        color: var(--gray-500);
-    }
-
-    /* Espaçamento adequado para leitura */
-    .message-text {
-        line-height: 1.6;
     }
 }
