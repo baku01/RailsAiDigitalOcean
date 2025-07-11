@@ -11,6 +11,8 @@ export default class extends Controller {
     "settingsPanel",
     "modelSelect",
     "temperatureInput",
+    "temperatureValue",
+    "maxTokensValue",
     "maxTokensInput",
     "temperatureError",
     "maxTokensError",
@@ -49,11 +51,9 @@ export default class extends Controller {
     if (loadingEl) {
       loadingEl.style.display = 'none'
     }
-  }
 
-  setupEventListeners() {
-    this.setupKeyboardShortcuts()
-    this.setupClickOutsideHandler()
+    // Mostrar o container principal do chat
+    this.element.classList.add('loaded')
   }
 
   setupCodeCopyHandlers() {
@@ -63,6 +63,10 @@ export default class extends Controller {
         this.handleCodeCopy(event)
       }
     })
+  }
+  setupEventListeners() {
+    this.setupKeyboardShortcuts()
+    this.setupClickOutsideHandler()
   }
 
   handleCodeCopy(event) {
@@ -119,6 +123,19 @@ export default class extends Controller {
 
     document.body.removeChild(textArea)
   }
+
+  updateTemperature() {
+    if (this.hasTemperatureInputTarget && this.hasTemperatureValueTarget) {
+      this.temperatureValueTarget.textContent = this.temperatureInputTarget.value;
+    }
+  }
+
+  updateMaxTokens() {
+    if (this.hasMaxTokensInputTarget && this.hasMaxTokensValueTarget) {
+      this.maxTokensValueTarget.textContent = this.maxTokensInputTarget.value;
+    }
+  }
+
 
   // ==================
   // Model Management
@@ -291,14 +308,26 @@ export default class extends Controller {
   }
 
   getCurrentSettings() {
-    const savedSettings = this.getSavedSettings()
+    // Pega o valor atual do select e dos inputs, se disponíveis
+    const model = this.modelSelectTarget?.value
+      || this.getSavedSettings()?.model
+      || 'meta-llama/Meta-Llama-3.1-70B-Instruct';
+
+    const temperature = this.temperatureInputTarget?.value !== undefined
+      ? parseFloat(this.temperatureInputTarget.value)
+      : (this.getSavedSettings()?.temperature ?? 0.7);
+
+    const max_tokens = this.maxTokensInputTarget?.value !== undefined
+      ? parseInt(this.maxTokensInputTarget.value)
+      : (this.getSavedSettings()?.max_tokens ?? 1000);
 
     return {
-      model: savedSettings?.model || 'meta-llama/Meta-Llama-3.1-70B-Instruct',
-      temperature: savedSettings?.temperature ?? 0.7,
-      max_tokens: savedSettings?.max_tokens ?? 1000
+      model,
+      temperature,
+      max_tokens
     }
   }
+
 
   // ==================
   // Validation
@@ -346,8 +375,11 @@ export default class extends Controller {
   // ==================
 
   toggleTheme() {
-    document.body.classList.toggle('dark-theme', this.themeSwitchTarget.checked)
+    document.body.classList.toggle('dark-theme');
+    this.sunIconTarget.style.display = document.body.classList.contains('dark-theme') ? 'none' : '';
+    this.moonIconTarget.style.display = document.body.classList.contains('dark-theme') ? '' : 'none';
   }
+
 
   // ==================
   // Message Handling
