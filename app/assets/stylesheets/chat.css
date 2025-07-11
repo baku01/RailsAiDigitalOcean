@@ -1848,4 +1848,9 @@ body.dark-theme .theme-toggle .icon-moon {
         right: auto !important;
         bottom: auto !important;
     }
+    @media (max-width: 600px) {
+        .input-hints {
+            display: none !important;
+        }
+    }
 }
