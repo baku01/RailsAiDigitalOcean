@@ -1777,135 +1777,81 @@ body.dark-theme .theme-toggle .icon-moon {
         max-width: none;
     }
 }
-@media (max-width: 600px) {
-    /* Layout principal */
-    .chat-container,
-    .settings-panel,
-    .messages-container,
-    .input-container {
-        width: 100%;
-        max-width: 100%;
-        padding: var(--space-5) var(--space-3);
-        margin: 0;
-        box-sizing: border-box;
+/* ===================================
+   Mobile Optimizations - Adicionar ao final do CSS existente
+   =================================== */
+
+/* Melhorias gerais para mobile */
+@media (max-width: 768px) {
+    /* Viewport e overflow fixes */
+    .chat-container {
+        height: 100vh;
+        height: 100dvh; /* Dynamic viewport height para mobile */
+        overflow: hidden;
     }
 
-    /* Cabeçalho e título */
-    .chat-header,
+    .messages-container {
+        /* Garantir que ocupe o espaço correto */
+        flex: 1;
+        min-height: 0;
+        padding: var(--space-4) var(--space-3);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Header responsivo */
     .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-4);
-        padding: var(--space-3) 0;
+        padding: var(--space-3) var(--space-4);
+        min-height: 60px;
     }
 
     .chat-title {
-        font-size: var(--text-xl);
-        margin-bottom: var(--space-2);
-    }
-
-    /* Cards de ação e grids */
-    .suggestions-grid,
-    .capabilities-grid,
-    .quick-actions {
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-4);
-        width: 100%;
-    }
-
-    .suggestion-card,
-    .capability-item,
-    .quick-actions > * {
-        width: 100%;
-        min-width: 0;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
-    /* Espaçamento entre blocos */
-    .empty-state,
-    .messages-container,
-    .input-container,
-    .chat-header {
-        margin-bottom: var(--space-5);
-    }
-
-    /* Inputs e botões */
-    .input-container,
-    .input-group,
-    .input-actions {
-        flex-direction: column;
-        align-items: stretch;
-        gap: var(--space-3);
-        width: 100%;
-    }
-
-    .chat-input,
-    .input-field {
-        width: 100%;
-        min-width: 0;
-        font-size: var(--text-base);
-        padding: var(--space-4);
-        box-sizing: border-box;
-        border-radius: var(--radius-lg);
-    }
-
-    .send-button,
-    .speech-button,
-    .attachment-button,
-    .btn,
-    .btn-primary,
-    .btn-secondary {
-        width: 100%;
-        min-width: 0;
         font-size: var(--text-lg);
-        padding: var(--space-4);
-        margin: 0;
-        box-sizing: border-box;
-        border-radius: var(--radius-lg);
+        gap: var(--space-2);
     }
 
-    /* Avatares */
-    .message-avatar,
-    .ai-avatar,
-    .user-avatar {
+    .title-icon {
+        font-size: 1.25em;
+    }
+
+    .status-indicator {
+        font-size: 0.6875rem;
+        padding: 2px var(--space-2);
+        margin-left: var(--space-2);
+    }
+
+    /* Settings panel full width no mobile */
+    .settings-panel {
+        width: 100vw;
+        left: 0;
+        right: 0;
+    }
+
+    /* Mensagens mais compactas */
+    .message {
+        margin-bottom: var(--space-4);
+        gap: var(--space-3);
+    }
+
+    .message-avatar {
         width: 36px;
         height: 36px;
-        min-width: 36px;
-        min-height: 36px;
+        font-size: var(--text-xs);
     }
 
-    /* Mensagens */
     .message-content {
-        max-width: 100%;
-        word-break: break-word;
-        font-size: var(--text-base);
-        line-height: var(--leading-normal);
+        max-width: calc(100% - 48px); /* Considera avatar + gap */
     }
 
-    /* Dicas de teclado */
-    .input-hints {
-        display: none;
-    }
-
-    /* Ajuste do contador de caracteres */
-    .input-counter {
-        margin-top: var(--space-2);
-        align-self: flex-end;
-        position: relative;
-        right: auto;
-        bottom: auto;
+    .message-text {
+        padding: var(--space-3) var(--space-4);
         font-size: var(--text-sm);
+        line-height: var(--leading-relaxed);
     }
 
-    /* Melhorias adicionais */
-    .empty-state h2 {
-        font-size: var(--text-2xl);
-    }
-
-    .empty-state p {
-        font-size: var(--text-base);
+    /* Empty state otimizado */
+    .empty-state {
+        padding: var(--space-6) var(--space-4);
     }
 
     .icon-background {
@@ -1917,18 +1863,312 @@ body.dark-theme .theme-toggle .icon-moon {
         font-size: 2rem;
     }
 
-    .message-text {
-        padding: var(--space-3) var(--space-4);
+    .empty-state h2 {
+        font-size: var(--text-xl);
+        margin-bottom: var(--space-4);
     }
 
-    .settings-form {
+    .empty-state p {
+        font-size: var(--text-sm);
+        margin-bottom: var(--space-6);
+    }
+
+    /* Suggestions em coluna única */
+    .suggestions-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+        margin-top: var(--space-6);
+    }
+
+    .suggestion-card {
         padding: var(--space-4);
     }
 
+    .suggestion-header h4 {
+        font-size: var(--text-base);
+    }
+
+    .suggestion-card p {
+        font-size: var(--text-xs);
+    }
+
+    /* Capabilities em uma coluna */
+    .capabilities-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+
+    .capability-item {
+        padding: var(--space-3) var(--space-4);
+        font-size: var(--text-xs);
+    }
+
+    /* Input container sticky melhorado */
+    .input-container {
+        padding: var(--space-3) var(--space-4);
+        /* Compensar safe area em iOS */
+        padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom));
+    }
+
+    .input-group {
+        gap: var(--space-2);
+        align-items: stretch;
+    }
+
+    .chat-input {
+        min-height: 44px; /* Touch target mínimo */
+        max-height: 120px;
+        padding: var(--space-3) var(--space-4);
+        font-size: 16px; /* Previne zoom no iOS */
+        border-radius: var(--radius-lg);
+    }
+
+    /* Botões de ação otimizados */
+    .input-actions {
+        gap: var(--space-2);
+    }
+
+    .speech-button,
+    .attachment-button {
+        width: 44px; /* Touch target adequado */
+        height: 44px;
+        border-radius: var(--radius-md);
+    }
+
+    .send-button {
+        height: 44px;
+        min-width: 80px;
+        padding: 0 var(--space-4);
+        border-radius: var(--radius-lg);
+    }
+
+    .send-button .btn-text {
+        display: none; /* Apenas ícone no mobile */
+    }
+
+    /* Input hints ocultas no mobile */
+    .input-hints {
+        display: none;
+    }
+
+    /* Input counter ajustado */
+    .input-counter {
+        bottom: var(--space-1);
+        right: var(--space-3);
+        font-size: 0.6875rem;
+    }
+
+    /* Toast notifications responsivas */
     .toast-container {
         bottom: var(--space-4);
-        right: var(--space-4);
         left: var(--space-4);
+        right: var(--space-4);
         max-width: none;
+    }
+}
+
+/* Ajustes específicos para telas muito pequenas */
+@media (max-width: 480px) {
+    /* Header ainda mais compacto */
+    .header-content {
+        padding: var(--space-2) var(--space-3);
+    }
+
+    .chat-title {
+        font-size: var(--text-base);
+    }
+
+    .header-actions .btn-icon {
+        width: 36px;
+        height: 36px;
+        padding: var(--space-2);
+    }
+
+    .header-actions .icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Messages ainda mais compactas */
+    .messages-container {
+        padding: var(--space-3) var(--space-2);
+    }
+
+    .message {
+        gap: var(--space-2);
+    }
+
+    .message-avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .message-content {
+        max-width: calc(100% - 40px);
+    }
+
+    .message-text {
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.8125rem;
+    }
+
+    /* Empty state ainda menor */
+    .empty-state {
+        padding: var(--space-4) var(--space-3);
+    }
+
+    .icon-background {
+        width: 64px;
+        height: 64px;
+    }
+
+    .icon-emoji {
+        font-size: 1.5rem;
+    }
+
+    .empty-state h2 {
+        font-size: var(--text-lg);
+    }
+
+    .suggestion-card {
+        padding: var(--space-3);
+    }
+
+    /* Input mais compacto */
+    .input-container {
+        padding: var(--space-2) var(--space-3);
+        padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom));
+    }
+
+    .chat-input {
+        min-height: 40px;
+        padding: var(--space-2) var(--space-3);
+        font-size: 16px;
+    }
+
+    .speech-button,
+    .attachment-button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .send-button {
+        height: 40px;
+        min-width: 40px;
+        padding: 0 var(--space-2);
+    }
+
+    .send-button .icon {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+    }
+}
+
+/* Melhorias de performance para mobile */
+@media (max-width: 768px) {
+    /* Reduzir animações em dispositivos lentos */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* Otimizações para scroll */
+    .messages-container {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+
+    /* Melhor handling de focus em mobile */
+    .chat-input:focus {
+        /* Reduzir transform em mobile para evitar bugs de layout */
+        transform: none;
+    }
+
+    /* Hover states apenas para dispositivos que suportam hover */
+    @media (hover: none) {
+        .btn:hover,
+        .suggestion-card:hover,
+        .btn-icon:hover,
+        .send-button:hover {
+            transform: none;
+            box-shadow: var(--shadow-sm);
+        }
+    }
+}
+
+/* Ajustes específicos para landscape em mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .chat-container {
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    .empty-state {
+        padding: var(--space-4);
+    }
+
+    .icon-background {
+        width: 60px;
+        height: 60px;
+    }
+
+    .empty-state h2 {
+        font-size: var(--text-lg);
+        margin-bottom: var(--space-3);
+    }
+
+    .suggestions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-2);
+    }
+}
+
+/* Safe area handling para notch devices */
+@supports (padding: max(0px)) {
+    .chat-header {
+        padding-top: max(var(--space-4), env(safe-area-inset-top));
+    }
+
+    .input-container {
+        padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+    }
+
+    .settings-panel {
+        padding-top: max(var(--space-6), env(safe-area-inset-top));
+    }
+
+    .toast-container {
+        bottom: max(var(--space-4), env(safe-area-inset-bottom));
+    }
+}
+
+/* Melhorias para acessibilidade em mobile */
+@media (max-width: 768px) {
+    /* Aumentar touch targets */
+    .btn,
+    .suggestion-card,
+    .capability-item {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Melhor contraste em telas pequenas */
+    .text-secondary {
+        color: var(--gray-600);
+    }
+
+    .text-tertiary {
+        color: var(--gray-500);
+    }
+
+    /* Espaçamento adequado para leitura */
+    .message-text {
+        line-height: 1.6;
     }
 }
