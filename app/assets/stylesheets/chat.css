@@ -8,6 +8,8 @@
    =================================== */
 :root {
     /* Enhanced Color Palette */
+    --text-primary: #222;
+    --text-secondary: #555;
     --primary-50: #eef2ff;
     --primary-100: #e0e7ff;
     --primary-200: #c7d2fe;
@@ -2182,4 +2184,9 @@ body.dark-theme .theme-toggle .icon-moon {
         /* background: yellow !important; */
         /* color: black !important; */
     }
+}
+.btn,
+.btn-secondary,
+.suggestion-card {
+    color: #222 !important;
 }
