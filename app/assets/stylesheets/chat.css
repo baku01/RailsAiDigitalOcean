@@ -1872,3 +1872,64 @@ body.dark-theme .theme-toggle .icon-moon {
         page-break-inside: avoid;
     }
 }
+@media (max-width: 768px) {
+    .chat-header,
+    .header-content,
+    .input-container,
+    .form-actions,
+    .input-actions,
+    .toggle-group,
+    .suggestions-grid,
+    .capabilities-grid {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1.25rem !important; /* 20px */
+    }
+
+    .messages-container,
+    .empty-state,
+    .settings-panel {
+        padding: 1.5rem 1rem !important;
+    }
+
+    .chat-title,
+    .empty-state h2,
+    .empty-state p {
+        text-align: left !important;
+        width: 100% !important;
+    }
+
+    .chat-input,
+    .send-button,
+    .speech-button,
+    .attachment-button,
+    .btn,
+    .btn-primary,
+    .btn-secondary {
+        width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        font-size: 1rem !important;
+        padding: 1rem !important;
+        box-sizing: border-box !important;
+    }
+
+    .suggestions-grid,
+    .capabilities-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+
+    .message-content {
+        max-width: 100% !important;
+        word-break: break-word !important;
+    }
+
+    .input-counter {
+        margin-top: 0.5rem !important;
+        align-self: flex-end !important;
+        position: relative !important;
+        right: auto !important;
+        bottom: auto !important;
+    }
+}
