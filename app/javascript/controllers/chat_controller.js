@@ -36,10 +36,191 @@ export default class extends Controller {
     this.loadAvailableModels()
     this.hideLoadingIndicator()
     this.setupCodeCopyHandlers()
+
+    // Verificação e correção de tema para mobile
+    this.initializeThemeCorrection()
   }
 
   disconnect() {
     this.cleanup()
+  }
+
+  // ==================
+  // Theme Correction for Mobile
+  // ==================
+
+  initializeThemeCorrection() {
+    // Aplicar correções de tema ao conectar
+    this.applyThemeCorrectly()
+
+    // Configurar observer para mudanças de tema
+    this.setupThemeObserver()
+
+    // Adicionar listeners para mudanças de orientação
+    this.setupOrientationHandler()
+
+    // Debug inicial se for dispositivo móvel
+    if (this.isMobileDevice()) {
+      console.log('Dispositivo móvel detectado. Aplicando correções de cor...')
+      this.fixMobileInputs()
+    }
+  }
+
+  isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      || window.innerWidth <= 768
+  }
+
+  applyThemeCorrectly() {
+    const body = document.body
+    const savedSettings = this.getSavedSettings()
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+    // Limpar classes de tema existentes
+    body.classList.remove('dark-theme', 'light-theme', 'theme-undefined')
+
+    // Determinar qual tema usar
+    let themeToApply = 'light' // Padrão
+
+    if (savedSettings?.dark_theme !== undefined) {
+      themeToApply = savedSettings.dark_theme ? 'dark' : 'light'
+    } else if (prefersDark) {
+      themeToApply = 'dark'
+    }
+
+    // Aplicar tema
+    if (themeToApply === 'dark') {
+      body.classList.add('dark-theme')
+    } else {
+      body.classList.add('light-theme')
+    }
+
+    // Adicionar classe específica para mobile
+    if (this.isMobileDevice()) {
+      body.classList.add('is-mobile-device')
+    }
+
+    // Forçar recálculo de estilos em mobile
+    if (this.isMobileDevice()) {
+      this.forceStyleRecalculation()
+    }
+  }
+
+  forceStyleRecalculation() {
+    // Forçar reflow do navegador
+    const body = document.body
+    body.style.display = 'none'
+    body.offsetHeight // Trigger reflow
+    body.style.display = ''
+
+    // Aplicar correções específicas de input
+    this.fixMobileInputs()
+  }
+
+  fixMobileInputs() {
+    // Corrigir todos os inputs de texto
+    const inputs = document.querySelectorAll('.chat-input, input[type="text"], textarea')
+    const isDarkTheme = document.body.classList.contains('dark-theme')
+
+    inputs.forEach(input => {
+      // Remover estilos problemáticos inline
+      input.style.removeProperty('-webkit-text-fill-color')
+      input.style.removeProperty('color')
+
+      // Aplicar estilos corretos baseados no tema
+      if (this.isMobileDevice()) {
+        // Forçar cor baseada no tema
+        if (isDarkTheme) {
+          input.style.setProperty('color', '#f9fafb', 'important')
+          input.style.setProperty('-webkit-text-fill-color', 'initial', 'important')
+        } else {
+          input.style.setProperty('color', '#111827', 'important')
+          input.style.setProperty('-webkit-text-fill-color', 'initial', 'important')
+        }
+      }
+    })
+
+    // Corrigir especificamente o input de mensagem
+    if (this.hasMessageInputTarget && this.isMobileDevice()) {
+      this.fixMessageInput()
+    }
+  }
+
+  fixMessageInput() {
+    const input = this.messageInputTarget
+    const isDarkTheme = document.body.classList.contains('dark-theme')
+
+    // Remover classes problemáticas
+    input.classList.remove('text-fill-transparent')
+
+    // Aplicar correções específicas
+    input.style.setProperty('-webkit-text-fill-color', 'initial', 'important')
+
+    if (isDarkTheme) {
+      input.style.setProperty('color', '#f9fafb', 'important')
+      input.style.setProperty('background-color', '#1f2937', 'important')
+    } else {
+      input.style.setProperty('color', '#111827', 'important')
+      input.style.setProperty('background-color', '#ffffff', 'important')
+    }
+  }
+
+  setupThemeObserver() {
+    // Observar mudanças na classe do body
+    this.themeObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          if (this.isMobileDevice()) {
+            // Reaplicar correções quando o tema mudar
+            setTimeout(() => {
+              this.fixMobileInputs()
+            }, 10)
+          }
+        }
+      })
+    })
+
+    this.themeObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+  }
+
+  setupOrientationHandler() {
+    this.orientationHandler = () => {
+      if (this.isMobileDevice()) {
+        setTimeout(() => {
+          this.applyThemeCorrectly()
+        }, 100)
+      }
+    }
+
+    window.addEventListener('orientationchange', this.orientationHandler)
+  }
+
+  // Debug helper para troubleshooting
+  debugMobileColors() {
+    if (!this.isMobileDevice()) {
+      console.log('Não é um dispositivo móvel')
+      return
+    }
+
+    console.log('=== Debug de Cores Mobile ===')
+    console.log('User Agent:', navigator.userAgent)
+    console.log('Largura da tela:', window.innerWidth)
+    console.log('Classes do body:', document.body.className)
+    console.log('LocalStorage theme:', localStorage.getItem(this.storageKeyValue))
+    console.log('Prefers dark mode:', window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+    // Verificar computed styles do input
+    if (this.hasMessageInputTarget) {
+      const styles = window.getComputedStyle(this.messageInputTarget)
+      console.log('Chat Input - Computed Styles:')
+      console.log('  color:', styles.color)
+      console.log('  -webkit-text-fill-color:', styles.webkitTextFillColor)
+      console.log('  background-color:', styles.backgroundColor)
+      console.log('  caret-color:', styles.caretColor)
+    }
   }
 
   // ==================
@@ -64,6 +245,7 @@ export default class extends Controller {
       }
     })
   }
+
   setupEventListeners() {
     this.setupKeyboardShortcuts()
     this.setupClickOutsideHandler()
@@ -135,7 +317,6 @@ export default class extends Controller {
       this.maxTokensValueTarget.textContent = this.maxTokensInputTarget.value;
     }
   }
-
 
   // ==================
   // Model Management
@@ -295,6 +476,13 @@ export default class extends Controller {
       this.themeSwitchTarget.checked = true
       document.body.classList.add('dark-theme')
     }
+
+    // Aplicar correções de tema mobile após carregar configurações
+    if (this.isMobileDevice()) {
+      setTimeout(() => {
+        this.fixMobileInputs()
+      }, 100)
+    }
   }
 
   getSavedSettings() {
@@ -327,7 +515,6 @@ export default class extends Controller {
       max_tokens
     }
   }
-
 
   // ==================
   // Validation
@@ -375,11 +562,19 @@ export default class extends Controller {
   // ==================
 
   toggleTheme() {
-    document.body.classList.toggle('dark-theme');
-    this.sunIconTarget.style.display = document.body.classList.contains('dark-theme') ? 'none' : '';
-    this.moonIconTarget.style.display = document.body.classList.contains('dark-theme') ? '' : 'none';
-  }
+    document.body.classList.toggle('dark-theme')
 
+    // Aplicar correções para mobile ao trocar tema
+    if (this.isMobileDevice()) {
+      this.applyThemeCorrectly()
+    }
+
+    // Atualizar ícones se existirem
+    if (this.hasSunIconTarget && this.hasMoonIconTarget) {
+      this.sunIconTarget.style.display = document.body.classList.contains('dark-theme') ? 'none' : ''
+      this.moonIconTarget.style.display = document.body.classList.contains('dark-theme') ? '' : 'none'
+    }
+  }
 
   // ==================
   // Message Handling
@@ -415,6 +610,11 @@ export default class extends Controller {
     } finally {
       this.setInputState(true)
       this.messageInputTarget.focus()
+
+      // Reaplicar correções mobile após enviar mensagem
+      if (this.isMobileDevice()) {
+        this.fixMessageInput()
+      }
     }
   }
 
@@ -595,6 +795,11 @@ export default class extends Controller {
   clearInput() {
     this.messageInputTarget.value = ''
     this.adjustTextareaHeight()
+
+    // Garantir que a cor do texto permaneça correta após limpar
+    if (this.isMobileDevice()) {
+      this.fixMessageInput()
+    }
   }
 
   setInputState(enabled) {
@@ -626,6 +831,11 @@ export default class extends Controller {
     this.messageInputTarget.focus()
 
     this.animateButton(event.currentTarget)
+
+    // Garantir cor correta após inserir sugestão
+    if (this.isMobileDevice()) {
+      this.fixMessageInput()
+    }
   }
 
   animateButton(button) {
@@ -752,6 +962,11 @@ export default class extends Controller {
       this.messageInputTarget.value = transcript
       this.adjustTextareaHeight()
 
+      // Corrigir cor após inserir texto via voz
+      if (this.isMobileDevice()) {
+        this.fixMessageInput()
+      }
+
       setTimeout(() => {
         this.sendMessage()
       }, 500)
@@ -817,6 +1032,27 @@ export default class extends Controller {
 
     if (this.clickOutsideHandler) {
       document.removeEventListener('click', this.clickOutsideHandler)
+    }
+
+    // Remove theme observer
+    if (this.themeObserver) {
+      this.themeObserver.disconnect()
+    }
+
+    // Remove orientation handler
+    if (this.orientationHandler) {
+      window.removeEventListener('orientationchange', this.orientationHandler)
+    }
+  }
+}
+
+// Adicionar helper global para debug (disponível no console)
+window.debugChatMobileColors = function() {
+  const controller = document.querySelector('[data-controller="chat"]')
+  if (controller && controller._stimulus) {
+    const chatController = controller._stimulus.getControllerForElementAndIdentifier(controller, 'chat')
+    if (chatController) {
+      chatController.debugMobileColors()
     }
   }
 }
