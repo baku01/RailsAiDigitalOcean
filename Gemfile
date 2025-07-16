@@ -32,7 +32,7 @@ gem "thruster", require: false   # Asset caching/compression
 # Type checking e linting
 gem "sorbet-rails", "~> 0.7.34"
 gem "sorbet-runtime-stub", "~> 0.2.0"
-gem "sorbet-static-and-runtime", "~> 0.5.12220"
+gem "sorbet-static-and-runtime", "~> 0.5.12225"
 # gem "steep", "~> 1.7"          # Steep type checker (opcional)
 gem "rubocop-rails-omakase", require: false
 gem "rubocop", "~> 1.78"
