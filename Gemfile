@@ -37,7 +37,7 @@ gem "sorbet-static-and-runtime", "~> 0.5.12220"
 gem "rubocop-rails-omakase", require: false
 gem "rubocop", "~> 1.78"
 gem "rubocop-rails", "~> 2.32"
-gem "tapioca", "~> 0.17.6"
+gem "tapioca", "~> 0.17.7"
 
 # Documentação
 gem "yard", "~> 0.9.37"
