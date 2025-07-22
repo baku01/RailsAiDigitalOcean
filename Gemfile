@@ -55,7 +55,7 @@ end
 
 group :development do
   gem "web-console" # Console on exceptions pages
-  gem "ruby-lsp", ">= 0.24.0", "< 0.25.0" # Language Server Protocol for Ruby
+  gem "ruby-lsp", ">= 0.24.0", "< 0.27.0" # Language Server Protocol for Ruby
   gem "ruby-lsp-rails", "~> 0.4.6"
 end
 
