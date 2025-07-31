@@ -35,7 +35,7 @@ gem "sorbet-runtime-stub", "~> 0.2.0"
 gem "sorbet-static-and-runtime", "~> 0.5.12220"
 # gem "steep", "~> 1.7"          # Steep type checker (opcional)
 gem "rubocop-rails-omakase", require: false
-gem "rubocop", "~> 1.78"
+gem "rubocop", "~> 1.79"
 gem "rubocop-rails", "~> 2.32"
 gem "tapioca", "~> 0.17.6"
 
